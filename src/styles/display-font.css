@@ -1,0 +1,32 @@
+/* სათაურების შრიფტი: ALK Rounded Nusx Medium (დიზაინერი: Aleksandr Sukiasov, 2011).
+   შეფუთვის წარწერის მსგავსი მომრგვალებული შრიფტი. გამოიყენება სათაურებში, გემოების სახელებში და ღილაკებში.
+   ძირითადი ტექსტი რჩება Prepo Sans (Noto Sans Georgian): ALK Rounded-ს მხოლოდ ერთი წონა აქვს.
+
+   ლიცენზია: ვებ-პაკეტი ვრცელდება CC BY-NC-ND 4.0-ით (არაკომერციული). კომერციული გამოყენებისთვის
+   საჭიროა ავტორის ნებართვა — იხ. TODO.md. დასაბრუნებლად: წაშალე ეს ფაილი და მისი import/preload Base.astro-ში. */
+
+@font-face {
+  font-family: 'ALK Rounded Nusx';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/ALKRoundedNusx-Medium.woff2') format('woff2');
+}
+
+:root {
+  --font-display: 'ALK Rounded Nusx', 'Prepo Sans', 'Noto Sans Georgian', 'Sylfaen', system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+.display,
+.h2,
+.h3,
+.btn,
+.eyebrow,
+.price,
+summary {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+}

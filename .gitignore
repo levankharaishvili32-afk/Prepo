@@ -6,3 +6,8 @@ dist/
 .netlify/
 .env
 *.log
+
+# შრიფტების შედარების დროებითი გვერდი (არ იტვირთება)
+src/pages/fonts-test.astro
+public/fonts-test/
+

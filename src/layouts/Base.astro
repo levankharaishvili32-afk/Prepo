@@ -1,8 +1,9 @@
 ---
-// CSS-ის რიგი მნიშვნელოვანია: reset -> ტიპოგრაფია -> კომპონენტები/utilities
+// CSS-ის რიგი მნიშვნელოვანია: reset -> ტიპოგრაფია -> კომპონენტები/utilities -> სათაურების შრიფტი
 import '../styles/base.css';
 import '../styles/typography.css';
 import '../styles/global.css';
+import '../styles/display-font.css'; // სათაურების შრიფტი (ALK Rounded Nusx)
 import { site, absoluteUrl } from '../config/site';
 import MetaPixel from '../components/MetaPixel.astro';
 
@@ -46,6 +47,7 @@ const ogImage = absoluteUrl('/og.jpg');
 
     <link rel="preload" href="/fonts/NotoSansGeorgian-georgian.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/NotoSansGeorgian-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/ALKRoundedNusx-Medium.woff2" as="font" type="font/woff2" crossorigin />
     <script is:inline>
       document.documentElement.classList.add('js');
     </script>

@@ -120,6 +120,7 @@ npm run video
 
 შრიფტი, ზომები და წონები ერთ ფაილშია: [src/styles/typography.css](src/styles/typography.css). ის ტიპოგრაფიის პაკეტიდან უცვლელად არის ჩასმული (შეცვლილია მხოლოდ შრიფტის ფაილების ბილიკები) — მნიშვნელობებს ნუ შეცვლი.
 
+- სათაურების შრიფტი (ALK Rounded Nusx) ცალკე ფაილშია: `src/styles/display-font.css`. ლიცენზიის საკითხი: იხ. `TODO.md`.
 - შრიფტის ფაილები: `public/fonts/` (სამივე `.woff2` სავალდებულოა; `latin-ext`-შია ლარის ნიშანი ₾).
 - კომპონენტებში ზომა და წონა Tailwind-ის კლასებით (`text-xl`, `font-extrabold`...) არ იწერება. გამოიყენე ტეგები და კლასები სკალიდან: `h1`/`.display`, `h2`/`.h2`, `h3`/`.h3`, `.lead`, `.small`, `.eyebrow`, `.btn`, `.price`.
 - CSS-ის ჩატვირთვის რიგი (`src/layouts/Base.astro`): `base.css` → `typography.css` → `global.css`. რიგს ნუ შეცვლი.
