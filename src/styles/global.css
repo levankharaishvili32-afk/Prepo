@@ -1,51 +1,17 @@
-@tailwind base;
+/* 3/3 — კომპონენტები და utility კლასები. შრიფტი, ზომები და წონები: typography.css (არ გადაფარო). */
 @tailwind components;
 @tailwind utilities;
-
-@layer base {
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
-    -webkit-text-size-adjust: 100%;
-  }
-  body {
-    @apply bg-cream font-sans font-medium text-dark-red antialiased;
-    overflow-x: clip;
-  }
-  /* ქართული სიტყვები გრძელია: სათაურები არასდროს გადმოდის კონტეინერიდან */
-  h1, h2, h3 {
-    overflow-wrap: break-word;
-    text-wrap: balance;
-    font-feature-settings: 'case' 0;
-  }
-  p {
-    text-wrap: pretty;
-  }
-  :focus-visible {
-    outline: 3px solid currentColor;
-    outline-offset: 3px;
-  }
-  ::selection {
-    background: #d52b1e;
-    color: #fff3df;
-  }
-}
 
 @layer components {
   .container-page {
     @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8;
   }
   .eyebrow {
-    @apply mb-3 inline-block rounded-full px-4 py-1.5 text-sm font-extrabold;
+    @apply mb-3 inline-block rounded-full px-4 py-2;
   }
-  .h-section {
-    @apply font-black leading-[1.08];
-    font-size: clamp(1.9rem, 1.1rem + 3.9vw, 3.5rem);
-  }
-  /* ღილაკი-„აბი". 19px/800 = „დიდი ტექსტი" WCAG-ით, ამიტომ მწვანე ფონზეც უსაფრთხოა. */
+  /* ღილაკი-აბი. ზომა და წონა (17px / 700) მოდის typography.css-დან. */
   .btn {
-    @apply inline-flex min-h-[3.25rem] items-center justify-center gap-2 rounded-full px-7 py-3 text-center font-extrabold leading-tight transition-transform duration-150;
-    font-size: 1.1875rem;
+    @apply inline-flex min-h-[3.25rem] items-center justify-center gap-2 whitespace-nowrap rounded-full px-7 py-3 text-center transition-transform duration-150;
   }
   .btn:hover {
     transform: translateY(-2px) rotate(-1deg);

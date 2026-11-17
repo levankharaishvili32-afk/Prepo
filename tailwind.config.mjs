@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['"Noto Sans Georgian Variable"', 'system-ui', 'sans-serif'],
+        sans: ['"Prepo Sans"', '"Noto Sans Georgian"', 'Sylfaen', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         card: '28px',

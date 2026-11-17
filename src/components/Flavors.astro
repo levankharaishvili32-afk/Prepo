@@ -1,6 +1,6 @@
 ---
 // გემოების სექცია. ბარათები იხატება site.flavors მასივიდან:
-// status: 'available' -> ფერადი ბარათი, status: 'soon' -> „მალე" ბარათი.
+// status: 'available' -> ფერადი ბარათი, status: 'soon' -> „მალე“ ბარათი.
 import { Picture } from 'astro:assets';
 import FlavorCard from './FlavorCard.astro';
 import Sticker from './Sticker.astro';
@@ -15,10 +15,10 @@ const soon = site.flavors.filter((flavor) => flavor.status === 'soon');
   <div class="container-page">
     <div class="max-w-2xl">
       <span class="eyebrow bg-dark-red text-cream">გემოები</span>
-      <h2 id="flavors-title" class="h-section">ცხარე თუ მწვანე?</h2>
+      <h2 id="flavors-title">ცხარე თუ მწვანე?</h2>
     </div>
 
-    <div class:list={['mt-16 grid gap-x-5 gap-y-14 md:grid-cols-2', available.length >= 3 && 'xl:grid-cols-3']}>
+    <div class:list={['mt-20 grid gap-x-5 gap-y-20 md:mt-16 md:grid-cols-2 md:gap-y-14', available.length >= 3 && 'xl:grid-cols-3']}>
       {available.map((flavor, index) => <FlavorCard flavor={flavor} index={index} />)}
     </div>
 
@@ -43,7 +43,7 @@ const soon = site.flavors.filter((flavor) => flavor.status === 'soon');
           >
             <Sticker image="mascotSitting" alt="" tilt={-10} size={110} reveal={false} class="w-24" />
             <p class="eyebrow mb-0 mt-2 bg-prepo-red text-cream">მალე</p>
-            <h3 class="text-3xl font-black">{flavor.name}</h3>
+            <h3 class="mb-0">{flavor.name}</h3>
           </article>
         ))
       }

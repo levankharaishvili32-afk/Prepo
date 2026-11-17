@@ -1,0 +1,184 @@
+/* =========================================================
+   PREPO — Typography
+   ერთადერთი შრიფტი: Noto Sans Georgian (variable, wght 100–900)
+   ფაილები: ./fonts/  (self-hosted, Google Fonts CDN არ გამოიყენება)
+   ========================================================= */
+
+/* ---------- @font-face ----------
+   სამი ფაილი, ერთი family. ბრაუზერი unicode-range-ით მხოლოდ საჭირო ფაილს ჩამოტვირთავს.
+   latin-ext აუცილებელია: ლარის ნიშანი ₾ (U+20BE) მხოლოდ მასშია. */
+
+@font-face {
+  font-family: 'Prepo Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/NotoSansGeorgian-georgian.woff2') format('woff2-variations'),
+       url('/fonts/NotoSansGeorgian-georgian.woff2') format('woff2');
+  unicode-range: U+0589, U+10A0-10FF, U+1C90-1CBA, U+1CBD-1CBF, U+205A, U+2D00-2D2F, U+2E31;
+}
+
+@font-face {
+  font-family: 'Prepo Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/NotoSansGeorgian-latin.woff2') format('woff2-variations'),
+       url('/fonts/NotoSansGeorgian-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+                 U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+                 U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Prepo Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('/fonts/NotoSansGeorgian-latin-ext.woff2') format('woff2-variations'),
+       url('/fonts/NotoSansGeorgian-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+                 U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+                 U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------- Tokens ---------- */
+
+:root {
+  --font-brand: 'Prepo Sans', 'Noto Sans Georgian', 'Sylfaen', system-ui, sans-serif;
+
+  /* წონები */
+  --fw-body: 500;
+  --fw-strong: 700;
+  --fw-heading: 800;
+  --fw-display: 900;
+
+  /* ზომები (mobile → desktop, 360px–1280px) */
+  --fs-display: clamp(2.5rem, 1.6rem + 4.2vw, 5.25rem);   /* 40 → 84px  hero სათაური */
+  --fs-h2:      clamp(2rem, 1.45rem + 2.5vw, 3.5rem);     /* 32 → 56px  სექციის სათაური */
+  --fs-h3:      clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem); /* 22 → 28px  ბარათის სათაური */
+  --fs-lead:    clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem); /* 18 → 22px ქვესათაური */
+  --fs-body:    1.0625rem;                                /* 17px */
+  --fs-small:   0.9375rem;                                /* 15px */
+  --fs-button:  1.0625rem;                                /* 17px */
+  --fs-eyebrow: 0.9375rem;                                /* 15px */
+  --fs-price:   clamp(1.75rem, 1.5rem + 1.1vw, 2.5rem);   /* 28 → 40px */
+
+  /* ხაზის სიმაღლე — მხედრულს მაღალი ასცენდერ/დესცენდერები აქვს, ქვემოთ არ ჩამოწიო */
+  --lh-display: 1.1;
+  --lh-heading: 1.15;
+  --lh-h3: 1.25;
+  --lh-body: 1.6;
+  --lh-tight: 1.2;
+
+  /* ასოთაშორისი */
+  --ls-display: -0.015em;
+  --ls-heading: -0.01em;
+  --ls-normal: 0;
+  --ls-eyebrow: 0.02em;
+
+  /* ფერები (ბრიფიდან) */
+  --c-red: #D52B1E;
+  --c-logo-red: #C8191E;
+  --c-green: #3F8F2E;
+  --c-cream: #FFF3DF;
+  --c-ink: #7A0F0A;
+}
+
+/* ---------- Base ---------- */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-brand);
+  font-weight: var(--fw-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--c-ink);
+  background: var(--c-cream);
+  font-synthesis: none;            /* ყალბი bold/italic აკრძალულია */
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, p, li, a, button, .display, .eyebrow {
+  text-transform: none !important; /* ქართულზე uppercase = მთავრული. ბრენდი არ იყენებს. */
+}
+
+h1, .display {
+  font-size: var(--fs-display);
+  font-weight: var(--fw-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+h2, .h2 {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+h3, .h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-strong);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-normal);
+  text-wrap: balance;
+}
+
+h1, h2, h3 { margin: 0 0 0.4em; }
+
+p { margin: 0 0 1em; text-wrap: pretty; max-width: 62ch; }
+
+.lead {
+  font-size: var(--fs-lead);
+  font-weight: var(--fw-body);
+  line-height: 1.5;
+}
+
+strong, b { font-weight: var(--fw-strong); }
+em, i { font-style: normal; font-weight: var(--fw-strong); } /* italic ფაილი არ არსებობს */
+
+small, .small {
+  font-size: var(--fs-small);
+  line-height: 1.5;
+}
+
+.eyebrow {
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-strong);
+  letter-spacing: var(--ls-eyebrow);
+  line-height: var(--lh-tight);
+}
+
+.btn, button {
+  font-family: inherit;
+  font-size: var(--fs-button);
+  font-weight: var(--fw-strong);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.price {
+  font-size: var(--fs-price);
+  font-weight: var(--fw-display);
+  line-height: 1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ფერადი ფონი → კრემისფერი ტექსტი */
+.on-red, .on-green { color: var(--c-cream); }
+.on-red { background: var(--c-red); }
+.on-green { background: var(--c-green); }
+
+input, textarea, select { font: inherit; }

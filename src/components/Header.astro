@@ -19,7 +19,7 @@ const links = [
       <Logo height={32} eager />
     </a>
 
-    <nav class="hidden items-center gap-7 text-base font-bold lg:flex" aria-label="მთავარი მენიუ">
+    <nav class="hidden items-center gap-7 font-bold lg:flex" aria-label="მთავარი მენიუ">
       {links.map((link) => <a href={link.href} class="rounded-full underline-offset-8 hover:underline">{link.label}</a>)}
     </nav>
 
@@ -41,7 +41,7 @@ const links = [
   </div>
 
   <nav id="mobile-menu" class="hidden border-t-2 border-dark-red/10 bg-cream lg:hidden" aria-label="მობილური მენიუ">
-    <ul class="container-page flex flex-col py-3 text-xl font-extrabold">
+    <ul class="h3 container-page flex flex-col py-3">
       {links.map((link) => (
         <li>
           <a href={link.href} class="block rounded-card px-3 py-3">{link.label}</a>

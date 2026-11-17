@@ -18,12 +18,12 @@ const contacts = [
   <div class="container-page flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
     <div>
       <Logo variant="cream" height={44} />
-      <p class="mt-4 text-xl font-extrabold">გახსენი. ჩააგდე. მიირთვი.</p>
+      <p class="lead mb-0 mt-4 font-bold">გახსენი. ჩააგდე. მიირთვი.</p>
     </div>
 
     {
       (socials.length > 0 || contacts.length > 0) && (
-        <div class="flex flex-col gap-6 text-lg font-bold sm:flex-row sm:gap-14">
+        <div class="flex flex-col gap-6 font-bold sm:flex-row sm:gap-14">
           {socials.length > 0 && (
             <ul class="space-y-2" aria-label="სოციალური ქსელები">
               {socials.map((social) => (
@@ -51,8 +51,8 @@ const contacts = [
     }
   </div>
 
-  <div class="container-page mt-10 border-t-2 border-cream/20 pt-6 text-base">
-    {site.legalText && <p class="mb-2 max-w-3xl">{site.legalText}</p>}
-    <p>© {new Date().getFullYear()} {site.name}</p>
+  <div class="small container-page mt-10 border-t-2 border-cream/20 pt-6">
+    {site.legalText && <p class="mb-2">{site.legalText}</p>}
+    <p class="mb-0">© {new Date().getFullYear()} {site.name}</p>
   </div>
 </footer>

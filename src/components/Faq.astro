@@ -11,12 +11,12 @@ const items = site.faq.filter((item) => item.answer);
     <section id="faq" class="pb-16 lg:pb-24" aria-labelledby="faq-title">
       <div class="container-page max-w-3xl">
         <span class="eyebrow bg-dark-red text-cream">კითხვები</span>
-        <h2 id="faq-title" class="h-section">ხშირი კითხვები</h2>
+        <h2 id="faq-title">ხშირი კითხვები</h2>
 
-        <div class="mt-8 space-y-3">
+        <div class="mt-6 space-y-3">
           {items.map((item) => (
             <details name="faq" class="group rounded-card border-2 border-dark-red/15 open:border-prepo-red">
-              <summary class="flex min-h-[3.5rem] items-center justify-between gap-4 rounded-card px-5 py-4 text-xl font-extrabold leading-snug">
+              <summary class="h3 flex min-h-[3.5rem] items-center justify-between gap-4 rounded-card px-5 py-4">
                 {item.question}
                 <span class="faq-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-prepo-red text-cream transition-transform duration-200" aria-hidden="true">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -24,7 +24,7 @@ const items = site.faq.filter((item) => item.answer);
                   </svg>
                 </span>
               </summary>
-              <p class="px-5 pb-5 text-lg leading-relaxed">{item.answer}</p>
+              <p class="mb-0 px-5 pb-5">{item.answer}</p>
             </details>
           ))}
         </div>

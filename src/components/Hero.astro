@@ -1,6 +1,7 @@
 ---
 // მობილურზე: ვიდეო მთელ ეკრანზე, ტექსტი ქვემოთ წითელ ბარათში.
 // Desktop-ზე: ტექსტი მარცხნივ, ვიდეო მომრგვალებულ ჩარჩოში მარჯვნივ.
+// ტიპოგრაფია: h1 = display (40 → 84px, 900), ქვესათაური = .lead — იხ. TYPOGRAPHY.md
 import HeroVideo from './HeroVideo.astro';
 import OrderButton from './OrderButton.astro';
 import Sticker from './Sticker.astro';
@@ -12,9 +13,11 @@ import Sticker from './Sticker.astro';
       <div class="h-full w-full lg:aspect-[9/16] lg:h-[min(76vh,700px)] lg:w-auto lg:overflow-hidden lg:rounded-card-xl lg:shadow-soft">
         <HeroVideo />
       </div>
+      <!-- desktop-ზე მასკოტი ვიდეოს ჩარჩოს კუთხეშია (იგივე სურათის ფაილი, მეორედ არ იტვირთება) -->
+      <Sticker image="mascotSitting" alt="" tilt={-8} size={180} float reveal={false} eager class="absolute -bottom-8 -left-16 hidden w-36 lg:block" />
     </div>
 
-    <div class="flex min-h-[max(calc(100svh-4rem),38rem)] flex-col justify-end p-3 lg:order-1 lg:min-h-0 lg:p-0">
+    <div class="flex min-h-[max(calc(100svh-4rem),40rem)] flex-col justify-end p-3 lg:order-1 lg:min-h-0 lg:p-0">
       <div class="relative rounded-card bg-prepo-red px-5 pb-6 pt-7 text-cream lg:bg-transparent lg:p-0 lg:text-dark-red">
         <Sticker
           image="mascotSitting"
@@ -24,12 +27,10 @@ import Sticker from './Sticker.astro';
           float
           reveal={false}
           eager
-          class="absolute -top-24 right-1 w-28 lg:-bottom-44 lg:left-[58%] lg:right-auto lg:top-auto lg:w-44"
+          class="absolute -top-24 right-1 w-28 lg:hidden"
         />
-        <h1 id="hero-title" class="pr-2 font-black leading-[1.05] lg:pr-0" style="font-size: clamp(2rem, 1.1rem + 4.6vw, 4.5rem)">
-          რესტორნის გემო სახლში, წუთებში
-        </h1>
-        <p class="mt-4 max-w-xl text-base font-semibold leading-relaxed lg:mt-6 lg:text-xl">
+        <h1 id="hero-title">რესტორნის გემო სახლში, წუთებში</h1>
+        <p class="lead max-w-xl">
           პრეპო ნამდვილი იტალიური სოუსია, უკვე მომზადებული და გაყინული. შენ მხოლოდ პასტა მოხარშე. დანარჩენი ჩვენ უკვე გავაკეთეთ.
         </p>
         <div class="mt-6 flex flex-col gap-3 sm:flex-row lg:mt-8">

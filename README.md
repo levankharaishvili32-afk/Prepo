@@ -1,7 +1,7 @@
 # Prepo (პრეპო) — ვებსაიტი
 
 ერთგვერდიანი, mobile-first ლენდინგი. Astro + Tailwind CSS, სტატიკური build.
-ბრენდის, ტექსტების და ასეტების წყარო: [PREPO_WEBSITE_BRIEF.md](PREPO_WEBSITE_BRIEF.md). შესავსები საკითხები: [TODO.md](TODO.md).
+ბრენდის, ტექსტების და ასეტების წყარო: [PREPO_WEBSITE_BRIEF.md](PREPO_WEBSITE_BRIEF.md). ტიპოგრაფიის წესები: [TYPOGRAPHY.md](TYPOGRAPHY.md) (ტიპოგრაფიის საკითხში ის მთავარია). შესავსები საკითხები: [TODO.md](TODO.md).
 
 ## ლოკალურად გაშვება
 
@@ -116,6 +116,15 @@ npm run video
 
 სექციების ტექსტები თვითონ კომპონენტებშია: `src/components/` (`Hero.astro`, `HowItWorks.astro`, `WhyPrepo.astro`, `Packaging.astro`, `OrderSection.astro`).
 
+### ტიპოგრაფია
+
+შრიფტი, ზომები და წონები ერთ ფაილშია: [src/styles/typography.css](src/styles/typography.css). ის ტიპოგრაფიის პაკეტიდან უცვლელად არის ჩასმული (შეცვლილია მხოლოდ შრიფტის ფაილების ბილიკები) — მნიშვნელობებს ნუ შეცვლი.
+
+- შრიფტის ფაილები: `public/fonts/` (სამივე `.woff2` სავალდებულოა; `latin-ext`-შია ლარის ნიშანი ₾).
+- კომპონენტებში ზომა და წონა Tailwind-ის კლასებით (`text-xl`, `font-extrabold`...) არ იწერება. გამოიყენე ტეგები და კლასები სკალიდან: `h1`/`.display`, `h2`/`.h2`, `h3`/`.h3`, `.lead`, `.small`, `.eyebrow`, `.btn`, `.price`.
+- CSS-ის ჩატვირთვის რიგი (`src/layouts/Base.astro`): `base.css` → `typography.css` → `global.css`. რიგს ნუ შეცვლი.
+- ქართულზე `uppercase` აკრძალულია; ბრჭყალები: „ასე“; ფასი: `25 ₾`.
+
 ### ფერები
 
 [tailwind.config.mjs](tailwind.config.mjs): `prepo-red`, `logo-red`, `pesto-green`, `cream`, `dark-red`. სუფთა თეთრი და შავი პალიტრაში განზრახ არ არის.
@@ -181,7 +190,7 @@ node scripts/lighthouse.mjs
 ```
 assets-original/      ჩამოტვირთული ორიგინალები (ხელუხლებელი)
 scripts/              ასეტების დამუშავება, ვიდეო, სქრინშოტები, Lighthouse
-public/               favicon, apple-touch-icon, og.jpg, video/
+public/               favicon, apple-touch-icon, og.jpg, video/, fonts/
 src/
   assets/             საიტის სურათები
   config/site.ts      ფასი, ბმულები, გემოები, FAQ
@@ -190,5 +199,5 @@ src/
   layouts/Base.astro  <head>, meta/OG თეგები, შრიფტი
   components/         სექციები
   pages/              index.astro, 404.astro
-  styles/global.css
+  styles/             base.css (reset) → typography.css → global.css
 ```

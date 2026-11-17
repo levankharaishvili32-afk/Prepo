@@ -1,7 +1,8 @@
 ---
-import '@fontsource-variable/noto-sans-georgian/wght.css';
+// CSS-ის რიგი მნიშვნელოვანია: reset -> ტიპოგრაფია -> კომპონენტები/utilities
+import '../styles/base.css';
+import '../styles/typography.css';
 import '../styles/global.css';
-import georgianFont from '@fontsource-variable/noto-sans-georgian/files/noto-sans-georgian-georgian-wght-normal.woff2?url';
 import { site, absoluteUrl } from '../config/site';
 import MetaPixel from '../components/MetaPixel.astro';
 
@@ -43,7 +44,8 @@ const ogImage = absoluteUrl('/og.jpg');
     <meta property="og:image:alt" content="Prepo-ს ლოგო და ორი კონტეინერი გაყინული სოუსით: არაბიატა და პესტო" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="preload" href={georgianFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/NotoSansGeorgian-georgian.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/NotoSansGeorgian-latin.woff2" as="font" type="font/woff2" crossorigin />
     <script is:inline>
       document.documentElement.classList.add('js');
     </script>

@@ -1,0 +1,22 @@
+/* 1/3 — Tailwind-ის reset. ჩატვირთვის რიგი (layouts/Base.astro):
+   base.css -> typography.css -> global.css
+   ასე typography.css reset-ის შემდეგ მოდის, ხოლო utility კლასები მის შემდეგ. */
+@tailwind base;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    overflow-x: clip;
+  }
+  :focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+  ::selection {
+    background: #d52b1e;
+    color: #fff3df;
+  }
+}

@@ -3,11 +3,12 @@ import { Picture } from 'astro:assets';
 import Sticker from './Sticker.astro';
 import { images } from '../config/images';
 
+// ბრჭყალები ქართული წესით: „ასე“ (TYPOGRAPHY.md, §4.7)
 const reasons = [
-  { title: 'ნამდვილი რეცეპტი', text: 'ავთენტური იტალიური სოუსი, არა „რაღაც მსგავსი".' },
+  { title: 'ნამდვილი რეცეპტი', text: 'ავთენტური იტალიური სოუსი, არა „რაღაც მსგავსი“.' },
   { title: 'არც დაჭრა, არც მოშუშვა', text: 'ყველაფერი უკვე გაკეთებულია.' },
   { title: 'ერთი ტაფა', text: 'ჭურჭელიც მინიმალურია.' },
-  { title: 'ყოველთვის ხელთ გაქვს', text: 'საყინულეში გელოდება „ასეთი დღეებისთვის".' },
+  { title: 'ყოველთვის ხელთ გაქვს', text: 'საყინულეში გელოდება „ასეთი დღეებისთვის“.' },
 ];
 ---
 
@@ -15,14 +16,14 @@ const reasons = [
   <div class="container-page grid items-center gap-10 lg:grid-cols-[1fr_0.8fr] lg:gap-16">
     <div>
       <span class="eyebrow bg-cream text-dark-red">რატომ პრეპო</span>
-      <h2 id="why-title" class="h-section">არ იცი მზარეულობა? არც გჭირდება.</h2>
+      <h2 id="why-title">არ იცი მზარეულობა? არც გჭირდება.</h2>
 
-      <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2">
         {
           reasons.map((reason, index) => (
             <li class="rounded-card bg-cream p-5 text-dark-red" data-reveal style={`--reveal-delay:${index * 80}ms`}>
-              <h3 class="text-xl font-extrabold leading-tight text-prepo-red">{reason.title}</h3>
-              <p class="mt-2 text-lg">{reason.text}</p>
+              <h3 class="mb-2 text-prepo-red">{reason.title}</h3>
+              <p class="mb-0">{reason.text}</p>
             </li>
           ))
         }
@@ -42,13 +43,7 @@ const reasons = [
           class="aspect-square w-full rounded-card-lg object-cover lg:rounded-card-xl"
         />
       </div>
-      <Sticker
-        image="mascotArrabbiata"
-        alt=""
-        tilt={-9}
-        size={170}
-        class="absolute -bottom-10 -left-2 w-32 sm:w-40 lg:-left-12"
-      />
+      <Sticker image="mascotArrabbiata" alt="" tilt={-9} size={170} class="absolute -bottom-10 -left-2 w-32 sm:w-40 lg:-left-12" />
     </div>
   </div>
 </section>
