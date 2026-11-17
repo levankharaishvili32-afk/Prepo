@@ -40,7 +40,7 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
       </div>
 
       <div class="min-w-0 p-5 sm:p-8">
-        <form data-order-form data-price={site.price ?? ''} data-delivery={site.deliveryFee ?? ''} data-key={site.orderFormKey ?? ''} data-max={site.maxQuantity} novalidate>
+        <form data-order-form data-price={site.price ?? ''} data-delivery={site.deliveryFee === null ? '' : String(site.deliveryFee)} data-key={site.orderFormKey ?? ''} data-max={site.maxQuantity} novalidate>
           <h2 class="h3 mb-1">გაყინული პასტის სოუსი</h2>
           <p class="mb-5">
             ერთი კონტეინერი ერთი გემოა, 250 მლ.
@@ -115,17 +115,19 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
           <div class="mt-5 rounded-[20px] bg-prepo-red/10 p-4" data-summary>
             <ul class="space-y-1" data-summary-lines></ul>
             {
+              site.deliveryFee !== null && (
+                <p class="mb-0 mt-1 flex justify-between gap-3" data-delivery-row hidden>
+                  <span>მიწოდება</span>
+                  <strong data-delivery-value />
+                </p>
+              )
+            }
+            {
               hasPrice && (
-                <>
-                  <p class="mb-0 mt-1 flex justify-between gap-3" data-delivery-row hidden>
-                    <span>მიწოდება</span>
-                    <span data-delivery-value />
-                  </p>
-                  <p class="mb-0 mt-3 flex items-baseline justify-between gap-3 border-t-2 border-dashed border-dark-red/25 pt-3">
-                    <strong>სულ:</strong>
-                    <span class="price" data-total />
-                  </p>
-                </>
+                <p class="mb-0 mt-3 flex items-baseline justify-between gap-3 border-t-2 border-dashed border-dark-red/25 pt-3">
+                  <strong>სულ:</strong>
+                  <span class="price" data-total />
+                </p>
               )
             }
           </div>
@@ -152,7 +154,7 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
   const form = document.querySelector<HTMLFormElement>('[data-order-form]');
   if (form) {
     const price = form.dataset.price ? Number(form.dataset.price) : null;
-    const delivery = form.dataset.delivery ? Number(form.dataset.delivery) : null;
+    const delivery = form.dataset.delivery !== '' && form.dataset.delivery !== undefined ? Number(form.dataset.delivery) : null;
     const key = form.dataset.key ?? '';
     const max = Number(form.dataset.max) || 10;
     const items = [...form.querySelectorAll<HTMLElement>('[data-item]')];
@@ -250,6 +252,7 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
             მისამართი: address,
             გადახდა: data.get('payment'),
             შეკვეთა: chosen.map((item) => `${item.name} × ${item.quantity}`).join(', '),
+            მიწოდება: delivery === null ? 'არ არის მითითებული' : delivery === 0 ? 'უფასო' : gel(delivery),
             ჯამი: sum === null ? 'ფასი საიტზე მითითებული არ არის' : gel(sum),
           }),
         });
