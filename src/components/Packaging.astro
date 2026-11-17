@@ -1,0 +1,50 @@
+---
+import { Picture } from 'astro:assets';
+import Sticker from './Sticker.astro';
+import { images } from '../config/images';
+
+// მხოლოდ ბრიფში დადასტურებული ფაქტები
+const features = ['250 მლ', 'უძლებს −18°C-ს', 'ჰერმეტული', 'მიკროტალღურში დასადები', 'მრავალჯერადი', 'BPA-free'];
+---
+
+<section id="packaging" class="py-16 lg:py-24" aria-labelledby="packaging-title">
+  <div class="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <div>
+      <span class="eyebrow bg-prepo-red text-cream">შეფუთვა</span>
+      <h2 id="packaging-title" class="h-section">იტალია შენს საყინულეში</h2>
+      <p class="mt-5 max-w-xl text-lg leading-relaxed">
+        ერთი კონტეინერი ერთი გემოა: სოუსი ერთ მთლიან ბლოკად გაყინული, გამჭვირვალე, კვებისთვის განკუთვნილ კონტეინერში. სოუსი რომ გათავდება, კონტეინერი შენ გრჩება.
+      </p>
+
+      <ul class="mt-6 flex flex-wrap gap-2.5">
+        {features.map((feature) => <li class="rounded-full bg-dark-red px-4 py-2 text-base font-bold text-cream">{feature}</li>)}
+      </ul>
+
+      <p class="mt-6 max-w-xl text-base">
+        შემადგენლობა, ალერგენები, კვებითი ღირებულება, შენახვისა და მომზადების წესები კონტეინერის ძირზე წერია.
+      </p>
+    </div>
+
+    <div class="relative">
+      <div data-reveal>
+        <Picture
+          src={images.packaging}
+          alt="ორი გამჭვირვალე კონტეინერი პრეპოს სოუსით: წითელი ზოლით არაბიატა და მწვანე ზოლით პესტო, სახურავზე პერსონაჟის სტიკერით"
+          formats={['avif', 'webp']}
+          widths={[400, 640, 900, 1200]}
+          sizes="(min-width: 1024px) 540px, 92vw"
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] w-full rounded-card-lg object-cover shadow-soft lg:rounded-card-xl"
+        />
+      </div>
+
+      <!-- მწვანე ფონზე მხოლოდ დიდი და მსხვილი ტექსტი -->
+      <div class="relative mx-3 -mt-8 rounded-card bg-pesto-green p-5 pr-24 text-cream sm:mx-8 sm:pr-36" data-reveal>
+        <h3 class="text-2xl font-black leading-tight">სტიკერი ასაძრობია</h3>
+        <p class="mt-2 text-xl font-bold leading-snug">ჩამოაძრე და მაცივარზე, ლეპტოპზე ან ტელეფონზე დაიკარი.</p>
+        <Sticker image="mascotPesto" alt="" tilt={10} size={150} reveal={false} class="absolute -right-4 -top-10 w-28 sm:w-36" />
+      </div>
+    </div>
+  </div>
+</section>

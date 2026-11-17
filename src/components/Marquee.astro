@@ -1,0 +1,30 @@
+---
+// მორბენალი ბანერი მოკლე ფრაზებით (ბრიფის მე-6 განყოფილება).
+// prefers-reduced-motion-ზე ჩერდება და ფრაზები უბრალოდ ერთმანეთის გვერდით ჩანს.
+interface Props {
+  phrases?: string[];
+  tone?: 'red' | 'dark';
+}
+
+const {
+  phrases = ['გახსენი. ჩააგდე. მიირთვი.', 'იტალია შენს საყინულეში', 'ცხარე თუ მწვანე?', 'ვახშამი, რომელიც უკვე მზადაა'],
+  tone = 'red',
+} = Astro.props;
+---
+
+<div class:list={['overflow-hidden py-4 text-cream', tone === 'red' ? 'bg-prepo-red' : 'bg-dark-red']}>
+  <div class="marquee-track gap-x-10 gap-y-2 px-5 text-xl font-black sm:text-2xl">
+    {
+      [0, 1].map((copy) => (
+        <ul class="flex shrink-0 items-center gap-10" aria-hidden={copy === 1 ? 'true' : undefined}>
+          {phrases.map((phrase) => (
+            <li class="flex items-center gap-10 whitespace-nowrap">
+              {phrase}
+              <span aria-hidden="true" class="inline-block h-3 w-3 rotate-12 rounded-[4px] bg-cream" />
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>

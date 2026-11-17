@@ -1,0 +1,18 @@
+---
+// რენდერდება მხოლოდ მაშინ, როცა site.metaPixelId შევსებულია (იხ. layouts/Base.astro).
+// თვითონ ლოგიკა: src/lib/pixel.ts
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<meta name="prepo-pixel-id" content={id} />
+<script>
+  import { initPixel } from '../lib/pixel';
+  const id = document.querySelector<HTMLMetaElement>('meta[name="prepo-pixel-id"]')?.content;
+  if (id) initPixel(id);
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none" alt="" src={`https://www.facebook.com/tr?id=${id}&ev=PageView&noscript=1`} />
+</noscript>

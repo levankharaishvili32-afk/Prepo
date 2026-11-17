@@ -1,0 +1,28 @@
+---
+// ლოგო ყოველთვის სურათია — შრიფტით არასდროს იკრიფება.
+import { Image } from 'astro:assets';
+import { images } from '../config/images';
+
+interface Props {
+  /** 'red' კრემისფერ ფონზე, 'cream' ფერად/მუქ ფონზე */
+  variant?: 'red' | 'cream';
+  /** სიმაღლე პიქსელებში */
+  height?: number;
+  eager?: boolean;
+  class?: string;
+}
+
+const { variant = 'red', height = 36, eager = false, class: className = '' } = Astro.props;
+const src = variant === 'red' ? images.logoRed : images.logoCream;
+const width = Math.round((src.width / src.height) * height);
+---
+
+<Image
+  src={src}
+  alt="Prepo"
+  width={width * 2}
+  height={height * 2}
+  loading={eager ? 'eager' : 'lazy'}
+  class={className}
+  style={`height:${height}px;width:auto`}
+/>

@@ -1,0 +1,63 @@
+---
+// შეკვეთის სექცია — ცალკე კომპონენტი, რომ მოგვიანებით ფორმით ან კალათით ადვილად ჩანაცვლდეს.
+// ახლანდელი ვერსია: ერთი ღილაკი, რომელიც site.orderUrl-ზე მიდის.
+// სანამ orderUrl ცარიელია, ღილაკის ნაცვლად ჩანს site.orderFallbackText.
+import OrderButton from './OrderButton.astro';
+import Sticker from './Sticker.astro';
+import { site } from '../config/site';
+
+const contacts = [
+  site.phone && { label: site.phone, href: `tel:${site.phone.replace(/[^+\d]/g, '')}` },
+  site.instagramUrl && { label: 'Instagram', href: site.instagramUrl },
+  site.facebookUrl && { label: 'Facebook', href: site.facebookUrl },
+].filter(Boolean) as { label: string; href: string }[];
+---
+
+<section id="order" class="py-16 lg:py-24" aria-labelledby="order-title">
+  <div class="container-page">
+    <div class="relative rounded-card-lg bg-prepo-red px-6 pb-10 pt-12 text-center text-cream sm:px-12 lg:rounded-card-xl lg:py-20">
+      <Sticker
+        image="mascotSitting"
+        alt="პრეპოს პერსონაჟი ხელს გიქნევს"
+        tilt={-8}
+        size={170}
+        class="absolute -top-14 left-1/2 w-28 -translate-x-1/2 sm:w-32 lg:-top-16 lg:left-auto lg:right-12 lg:w-40 lg:translate-x-0"
+      />
+      <p class="mx-auto max-w-2xl text-xl font-extrabold leading-snug">მიტანას 40 წუთი ელოდები. პრეპოს&nbsp;— წუთებს.</p>
+      <h2 id="order-title" class="h-section mx-auto mt-4 max-w-3xl">ვახშამი, რომელიც უკვე მზადაა</h2>
+
+      {
+        site.price !== null && (
+          <p class="mt-6 text-2xl font-extrabold">
+            <span class="text-4xl font-black">{site.price} ₾</span> / კონტეინერი
+          </p>
+        )
+      }
+
+      <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        {
+          site.orderUrl ? (
+            <OrderButton variant="cream" />
+          ) : (
+            <p class="rounded-card bg-cream px-6 py-3 text-lg font-extrabold text-dark-red">{site.orderFallbackText}</p>
+          )
+        }
+        <a href="#flavors" class="btn btn-ghost">აირჩიე გემო</a>
+      </div>
+
+      {
+        contacts.length > 0 && (
+          <ul class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xl font-extrabold">
+            {contacts.map((contact) => (
+              <li>
+                <a href={contact.href} class="underline underline-offset-4" rel="noopener">
+                  {contact.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</section>

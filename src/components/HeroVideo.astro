@@ -1,0 +1,89 @@
+---
+// Hero-ს ვიდეო. პირველ ეკრანს არ ბლოკავს:
+// - თავიდან ჩანს მხოლოდ poster სურათი (AVIF/WebP, fetchpriority=high);
+// - ვიდეოს წყაროები გვერდის ჩატვირთვის შემდეგ ემატება და მერე იწყება autoplay (muted, loop, playsinline);
+// - prefers-reduced-motion-ზე ვიდეო საერთოდ არ იტვირთება, რჩება poster.
+import { Picture } from 'astro:assets';
+import { images, heroVideo } from '../config/images';
+---
+
+<div class="relative h-full w-full overflow-hidden bg-dark-red" data-hero-media>
+  <Picture
+    src={images.heroPoster}
+    alt="ტაფაზე პასტას პრეპოს გაყინული სოუსი ერევა"
+    formats={['avif', 'webp']}
+    widths={[480, 720, 1080]}
+    sizes="(min-width: 1024px) 420px, 100vw"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+    class="absolute inset-0 h-full w-full object-cover"
+    data-hero-poster
+  />
+  <video
+    class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500"
+    muted
+    loop
+    playsinline
+    preload="none"
+    aria-hidden="true"
+    tabindex="-1"
+    data-hero-video
+  >
+    <source data-src={heroVideo.webm} type="video/webm" />
+    <source data-src={heroVideo.mp4} type="video/mp4" />
+  </video>
+  <button
+    type="button"
+    class="absolute right-3 top-3 hidden h-11 w-11 items-center justify-center rounded-full bg-cream text-dark-red"
+    aria-label="ვიდეოს შეჩერება"
+    data-hero-toggle
+  >
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-icon-pause>
+      <rect x="2.5" y="2" width="4" height="12" rx="1"></rect>
+      <rect x="9.5" y="2" width="4" height="12" rx="1"></rect>
+    </svg>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" class="hidden" data-icon-play>
+      <path d="M4 2.5v11a.5.5 0 0 0 .77.42l8.5-5.5a.5.5 0 0 0 0-.84l-8.5-5.5A.5.5 0 0 0 4 2.5Z"></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-hero-toggle]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+
+  if (video && !reduceMotion && !saveData) {
+    const start = () => {
+      const poster = document.querySelector<HTMLImageElement>('[data-hero-poster]');
+      if (poster?.currentSrc) video.poster = poster.currentSrc;
+      video.querySelectorAll<HTMLSourceElement>('source[data-src]').forEach((source) => {
+        source.src = source.dataset.src!;
+      });
+      video.autoplay = true;
+      video.addEventListener(
+        'playing',
+        () => {
+          video.classList.remove('opacity-0');
+          toggle?.classList.replace('hidden', 'inline-flex');
+        },
+        { once: true },
+      );
+      video.load();
+      video.play().catch(() => {});
+    };
+    if (document.readyState === 'complete') setTimeout(start, 200);
+    else window.addEventListener('load', () => setTimeout(start, 200), { once: true });
+
+    toggle?.addEventListener('click', () => {
+      const paused = video.paused;
+      if (paused) video.play().catch(() => {});
+      else video.pause();
+      toggle.setAttribute('aria-label', paused ? 'ვიდეოს შეჩერება' : 'ვიდეოს გაშვება');
+      toggle.querySelector('[data-icon-pause]')?.classList.toggle('hidden', !paused);
+      toggle.querySelector('[data-icon-play]')?.classList.toggle('hidden', paused);
+    });
+  }
+</script>

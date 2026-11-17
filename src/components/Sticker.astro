@@ -1,0 +1,35 @@
+---
+// მასკოტი სტიკერივით: კრემისფერი კონტური (სურათშივეა ჩაშენებული), ოდნავ დახრილი,
+// hover-ზე ირხევა, scroll-ზე ჩნდება. prefers-reduced-motion გათვალისწინებულია global.css-ში.
+import { Picture } from 'astro:assets';
+import { images, type ImageKey } from '../config/images';
+
+interface Props {
+  image: ImageKey;
+  alt: string;
+  /** დახრა გრადუსებში */
+  tilt?: number;
+  /** ყველაზე დიდი ზომა პიქსელებში, რა ზომითაც გამოჩნდება */
+  size?: number;
+  float?: boolean;
+  reveal?: boolean;
+  eager?: boolean;
+  class?: string;
+}
+
+const { image, alt, tilt = -6, size = 240, float = false, reveal = true, eager = false, class: className = '' } = Astro.props;
+---
+
+<div class={className} data-reveal={reveal ? '' : undefined}>
+  <Picture
+    src={images[image]}
+    alt={alt}
+    formats={['avif', 'webp']}
+    widths={[size, size * 2]}
+    sizes={`${size}px`}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    class:list={['sticker h-auto w-full', float && 'sticker-float']}
+    style={`--tilt: ${tilt}deg`}
+  />
+</div>

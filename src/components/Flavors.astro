@@ -1,0 +1,52 @@
+---
+// გემოების სექცია. ბარათები იხატება site.flavors მასივიდან:
+// status: 'available' -> ფერადი ბარათი, status: 'soon' -> „მალე" ბარათი.
+import { Picture } from 'astro:assets';
+import FlavorCard from './FlavorCard.astro';
+import Sticker from './Sticker.astro';
+import { images } from '../config/images';
+import { site } from '../config/site';
+
+const available = site.flavors.filter((flavor) => flavor.status === 'available');
+const soon = site.flavors.filter((flavor) => flavor.status === 'soon');
+---
+
+<section id="flavors" class="py-16 lg:py-24" aria-labelledby="flavors-title">
+  <div class="container-page">
+    <div class="max-w-2xl">
+      <span class="eyebrow bg-dark-red text-cream">გემოები</span>
+      <h2 id="flavors-title" class="h-section">ცხარე თუ მწვანე?</h2>
+    </div>
+
+    <div class:list={['mt-16 grid gap-x-5 gap-y-14 md:grid-cols-2', available.length >= 3 && 'xl:grid-cols-3']}>
+      {available.map((flavor, index) => <FlavorCard flavor={flavor} index={index} />)}
+    </div>
+
+    <div class="mt-5 grid gap-5 md:grid-cols-2">
+      <div data-reveal>
+        <Picture
+          src={images.promoRedGreen}
+          alt="ორი კონტეინერი პრეპოს სოუსით: არაბიატა წითელ ფონზე და პესტო მწვანე ფონზე, გარშემო ინგრედიენტები"
+          formats={['avif', 'webp']}
+          widths={[400, 640, 900, 1080]}
+          sizes="(min-width: 768px) 540px, 92vw"
+          loading="lazy"
+          decoding="async"
+          class="aspect-[4/3] h-full w-full rounded-card-lg object-cover lg:rounded-card-xl"
+        />
+      </div>
+      {
+        soon.map((flavor) => (
+          <article
+            class="flex min-h-[15rem] flex-col items-center justify-center gap-2 rounded-card-lg border-[3px] border-dashed border-dark-red/40 p-8 text-center lg:rounded-card-xl"
+            data-reveal
+          >
+            <Sticker image="mascotSitting" alt="" tilt={-10} size={110} reveal={false} class="w-24" />
+            <p class="eyebrow mb-0 mt-2 bg-prepo-red text-cream">მალე</p>
+            <h3 class="text-3xl font-black">{flavor.name}</h3>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

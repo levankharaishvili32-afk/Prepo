@@ -1,0 +1,52 @@
+---
+import { Picture } from 'astro:assets';
+import { images } from '../config/images';
+
+const steps = [
+  { title: 'გახსენი', text: 'ამოიღე საყინულიდან და გახსენი კონტეინერი.' },
+  { title: 'ჩააგდე ტაფაში', text: 'გაყინული სოუსი პირდაპირ ტაფაში მიდის.' },
+  { title: 'მიირთვი', text: 'შეურიე პასტას და ვახშამი მზადაა.' },
+];
+---
+
+<section id="how" class="py-16 lg:py-24" aria-labelledby="how-title">
+  <div class="container-page grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <div data-reveal>
+      <Picture
+        src={images.promoKitchen}
+        alt="სამზარეულოში კონტეინერიდან გაყინული არაბიატას სოუსი ტაფაში, პასტაზე ვარდება"
+        formats={['avif', 'webp']}
+        widths={[400, 640, 900, 1080]}
+        sizes="(min-width: 1024px) 520px, 92vw"
+        loading="lazy"
+        decoding="async"
+        class="aspect-square w-full rounded-card-lg object-cover shadow-soft lg:rounded-card-xl"
+      />
+    </div>
+
+    <div>
+      <span class="eyebrow bg-prepo-red text-cream">როგორ მუშაობს</span>
+      <h2 id="how-title" class="h-section">1 კუბი, 1 ტაფა და ვახშამი მზადაა</h2>
+
+      <ol class="mt-8 space-y-4">
+        {
+          steps.map((step, index) => (
+            <li class="flex gap-4 rounded-card border-2 border-dark-red/15 p-5" data-reveal style={`--reveal-delay:${index * 90}ms`}>
+              <span
+                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-prepo-red text-2xl font-black text-cream"
+                aria-hidden="true"
+              >
+                {index + 1}
+              </span>
+              <div>
+                <h3 class="text-2xl font-extrabold leading-tight">{step.title}</h3>
+                <p class="mt-1 text-lg">{step.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="mt-6 text-lg font-bold text-prepo-red">არ სჭირდება დაჭრა, მოშუშვა ან რეცეპტის ძებნა. ერთი ტაფა.</p>
+    </div>
+  </div>
+</section>

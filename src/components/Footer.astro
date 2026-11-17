@@ -1,0 +1,58 @@
+---
+// სოც. ქსელები, კონტაქტი და იურიდიული ტექსტი ჩანს მხოლოდ მაშინ, როცა site.ts-ში შევსებულია.
+import Logo from './Logo.astro';
+import { site } from '../config/site';
+
+const socials = [
+  site.instagramUrl && { label: 'Instagram', href: site.instagramUrl },
+  site.facebookUrl && { label: 'Facebook', href: site.facebookUrl },
+].filter(Boolean) as { label: string; href: string }[];
+
+const contacts = [
+  site.phone && { label: site.phone, href: `tel:${site.phone.replace(/[^+\d]/g, '')}` },
+  site.email && { label: site.email, href: `mailto:${site.email}` },
+].filter(Boolean) as { label: string; href: string }[];
+---
+
+<footer class="bg-dark-red py-12 text-cream">
+  <div class="container-page flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+    <div>
+      <Logo variant="cream" height={44} />
+      <p class="mt-4 text-xl font-extrabold">გახსენი. ჩააგდე. მიირთვი.</p>
+    </div>
+
+    {
+      (socials.length > 0 || contacts.length > 0) && (
+        <div class="flex flex-col gap-6 text-lg font-bold sm:flex-row sm:gap-14">
+          {socials.length > 0 && (
+            <ul class="space-y-2" aria-label="სოციალური ქსელები">
+              {socials.map((social) => (
+                <li>
+                  <a href={social.href} class="underline underline-offset-4" target="_blank" rel="noopener">
+                    {social.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          {contacts.length > 0 && (
+            <ul class="space-y-2" aria-label="კონტაქტი">
+              {contacts.map((contact) => (
+                <li>
+                  <a href={contact.href} class="underline underline-offset-4">
+                    {contact.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  <div class="container-page mt-10 border-t-2 border-cream/20 pt-6 text-base">
+    {site.legalText && <p class="mb-2 max-w-3xl">{site.legalText}</p>}
+    <p>© {new Date().getFullYear()} {site.name}</p>
+  </div>
+</footer>

@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Sticker from '../components/Sticker.astro';
+---
+
+<Base title="გვერდი ვერ მოიძებნა — Prepo" noindex>
+  <Header />
+  <main id="main" class="container-page flex min-h-[70svh] flex-col items-center justify-center py-16 text-center">
+    <Sticker
+      image="mascotSitting"
+      alt="პრეპოს პერსონაჟი: წითელი სოუსის კუბი ზის და ხელს გიქნევს"
+      tilt={-6}
+      size={260}
+      float
+      reveal={false}
+      eager
+      class="w-48 sm:w-64"
+    />
+    <p class="mt-6 font-black leading-none text-prepo-red" style="font-size: clamp(4rem, 2rem + 12vw, 8rem)">404</p>
+    <h1 class="h-section mt-2">ეს გვერდი ვერ ვიპოვეთ</h1>
+    <blockquote class="mt-6 max-w-xl rounded-card bg-prepo-red px-6 py-5 text-xl font-bold leading-relaxed text-cream">
+      გამარჯობა, მე პრეპო ვარ. კი, კუბი ვარ. კი, გაყინული. და კი, შენს პასტას რესტორნის გემოს მივცემ.
+    </blockquote>
+    <a href="/" class="btn btn-red mt-8">მთავარ გვერდზე დაბრუნება</a>
+  </main>
+  <Footer />
+</Base>
