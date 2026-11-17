@@ -51,6 +51,24 @@ export const site = {
   /** ტექსტი შეკვეთის სექციაში, სანამ orderUrl ცარიელია. */
   orderFallbackText: 'შეკვეთის ბმული მალე დაემატება.',
 
+  // ───────── შეკვეთის გვერდი (/order) ─────────
+  /**
+   * Web3Forms-ის access key (https://web3forms.com — უფასოა, გასაღები მოდის შენს ელფოსტაზე).
+   * შეკვეთები ამ გასაღებზე მიბმულ ელფოსტაზე მოვა. გასაღები საჯაროა, კოდში ჩაწერა უსაფრთხოა.
+   * null = ფორმა გამორთულია: /order გვერდი აჩვენებს შეტყობინებას და „შეუკვეთე" ღილაკები მასზე არ მიდის.
+   */
+  orderFormKey: null as string | null,
+  /** მიწოდების ღირებულება ლარში. 0 = უფასო, null = ჯამში არ ჩანს (უცნობია). */
+  deliveryFee: null as number | null,
+  /** სად ხდება მიწოდება (ფორმაში ჩანს ტექსტად). */
+  deliveryCity: 'თბილისი',
+  /** ერთ შეკვეთაში თითო გემოს მაქსიმალური რაოდენობა. */
+  maxQuantity: 10,
+  paymentMethods: [
+    { id: 'cod', label: 'გადახდა მიტანისას', note: 'კურიერთან' },
+    { id: 'transfer', label: 'ბანკით გადარიცხვა', note: 'რეკვიზიტებს მოგწერთ' },
+  ],
+
   phone: null as string | null, // მაგ. '+995 5XX XX XX XX'
   email: null as string | null,
   instagramUrl: null as string | null,
@@ -137,6 +155,14 @@ export const site = {
 /** აბსოლუტური ბმული (OG თეგებისთვის). დომენის გარეშე აბრუნებს ფარდობით მისამართს. */
 export const absoluteUrl = (path: string) =>
   site.domain ? new URL(path, `https://${site.domain}`).href : path;
+
+/**
+ * სად მიდის „შეუკვეთე" ღილაკები:
+ * 1) orderUrl, თუ შევსებულია (გარე ბმული);
+ * 2) /order გვერდი, თუ ფორმა ჩართულია (orderFormKey);
+ * 3) მთავარი გვერდის შეკვეთის სექცია.
+ */
+export const orderHref = site.orderUrl ?? (site.orderFormKey ? '/order' : '/#order');
 
 /** „წუთებში" ან დადასტურებული კონკრეტული დრო. */
 export const cookTimeText = site.cookTime ?? 'წუთებში';

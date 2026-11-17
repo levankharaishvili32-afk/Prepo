@@ -1,9 +1,11 @@
 ---
 // ყველა „შეუკვეთე“ ღილაკი ამ კომპონენტით იხატება.
-// - orderUrl შევსებულია  -> ღილაკი პირდაპირ იქ მიდის (ახალ ჩანართში).
-// - orderUrl ცარიელია    -> ღილაკი გვერდის შეკვეთის სექციაზე (#order) ჩადის.
+// სად მიდის (იხ. orderHref, src/config/site.ts):
+// - orderUrl შევსებულია     -> გარე ბმული (ახალ ჩანართში);
+// - ფორმა ჩართულია          -> /order გვერდი (გემოს ბარათიდან: /order?flavor=pesto, გემო წინასწარ ირჩევა);
+// - არცერთი                 -> მთავარი გვერდის შეკვეთის სექცია (#order).
 // data-order / data-flavor ატრიბუტებს Meta Pixel-ის Lead ივენთი იყენებს (src/lib/pixel.ts).
-import { site } from '../config/site';
+import { site, orderHref } from '../config/site';
 
 interface Props {
   label?: string;
@@ -14,7 +16,7 @@ interface Props {
 
 const { label = 'შეუკვეთე ახლავე', flavor, variant = 'red', class: className = '' } = Astro.props;
 const external = Boolean(site.orderUrl);
-const href = site.orderUrl ?? '/#order';
+const href = !external && site.orderFormKey && flavor ? `${orderHref}?flavor=${flavor}` : orderHref;
 ---
 
 <a

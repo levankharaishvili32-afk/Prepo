@@ -5,6 +5,8 @@
  * - PageView: გვერდის გახსნისას.
  * - Lead: ნებისმიერ „შეუკვეთე" ღილაკზე დაჭერისას ([data-order] ატრიბუტი).
  *   თუ ღილაკი კონკრეტულ გემოს ეკუთვნის (data-flavor="pesto"), გემო პარამეტრად მიჰყვება.
+ * - Purchase: /order გვერდზე შეკვეთის წარმატებით გაგზავნისას (ფორმა უშვებს `prepo:order` ივენთს).
+ *   თუ ფასი ცნობილია, მიჰყვება თანხა (GEL); თუ არა, იგზავნება Lead გემოების სიით.
  */
 
 type Fbq = ((...args: unknown[]) => void) & {
@@ -59,8 +61,25 @@ function bindOrderButtons() {
   });
 }
 
+export type OrderDetail = { items: { id: string; quantity: number }[]; total: number | null };
+
+export function trackOrder(detail: OrderDetail) {
+  const contents = detail.items.map((item) => ({ id: item.id, quantity: item.quantity }));
+  if (detail.total !== null) {
+    window.fbq?.('track', 'Purchase', { value: detail.total, currency: 'GEL', contents, content_type: 'product' });
+  } else {
+    window.fbq?.('track', 'Lead', { content_name: detail.items.map((item) => item.id).join(','), content_category: 'order' });
+  }
+}
+
+/** შეკვეთის ფორმა (src/pages/order.astro) წარმატებისას უშვებს `prepo:order` ივენთს. */
+function bindOrderForm() {
+  document.addEventListener('prepo:order', (event) => trackOrder((event as CustomEvent<OrderDetail>).detail));
+}
+
 export function initPixel(pixelId: string) {
   loadPixel(pixelId);
   trackPageView();
   bindOrderButtons();
+  bindOrderForm();
 }

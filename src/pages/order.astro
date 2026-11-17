@@ -1,0 +1,273 @@
+---
+// შეკვეთის გვერდი: გემოების რაოდენობა, საკონტაქტო მონაცემები, გადახდის მეთოდი, ჯამი.
+// ფორმა იგზავნება Web3Forms-ით ელფოსტაზე (site.orderFormKey). სერვერი საჭირო არ არის.
+// ფასი, მიწოდების ღირებულება და მეთოდები: src/config/site.ts
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Sticker from '../components/Sticker.astro';
+import { images } from '../config/images';
+import { site } from '../config/site';
+
+const flavors = site.flavors.filter((flavor) => flavor.status === 'available');
+const enabled = Boolean(site.orderFormKey);
+const hasPrice = site.price !== null;
+const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 py-3 text-dark-red placeholder:text-dark-red/50 focus:border-prepo-red focus:outline-none';
+---
+
+<Base title={`შეკვეთა — ${site.name}`} description="შეუკვეთე პრეპოს გაყინული პასტის სოუსი: აირჩიე გემო და რაოდენობა, მიუთითე მისამართი." noindex={!enabled}>
+  <Header />
+  <main id="main" class="container-page py-10 lg:py-16">
+    <div class="mx-auto max-w-2xl text-center">
+      <span class="eyebrow bg-prepo-red text-cream">შეკვეთა</span>
+      <h1 class="h2">შეუკვეთე ახლავე</h1>
+      <p class="lead mx-auto">შეავსე ფორმა და შეკვეთის დასადასტურებლად დაგიკავშირდებით.</p>
+    </div>
+
+    <div class="mt-8 grid overflow-hidden rounded-card-lg border-2 border-dark-red/15 shadow-soft lg:grid-cols-[0.85fr_1fr] lg:rounded-card-xl">
+      <div class="relative min-w-0 bg-prepo-red">
+        <Picture
+          src={images.promoRedGreen}
+          alt="ორი კონტეინერი პრეპოს სოუსით: არაბიატა და პესტო"
+          formats={['avif', 'webp']}
+          widths={[400, 640, 900, 1080]}
+          sizes="(min-width: 1024px) 480px, 100vw"
+          loading="eager"
+          decoding="async"
+          class="aspect-[16/10] h-full w-full object-cover lg:aspect-auto"
+        />
+      </div>
+
+      <div class="min-w-0 p-5 sm:p-8">
+        <form data-order-form data-price={site.price ?? ''} data-delivery={site.deliveryFee ?? ''} data-key={site.orderFormKey ?? ''} data-max={site.maxQuantity} novalidate>
+          <h2 class="h3 mb-1">გაყინული პასტის სოუსი</h2>
+          <p class="mb-5">
+            ერთი კონტეინერი ერთი გემოა, 250 მლ.
+            {hasPrice && <strong> ფასი: {site.price} ₾ თითო კონტეინერი.</strong>}
+          </p>
+
+          <fieldset class="min-w-0">
+            <legend class="small mb-2 font-bold">აირჩიე გემო და რაოდენობა</legend>
+            <div class="space-y-3">
+              {
+                flavors.map((flavor, index) => (
+                  <div class="flex items-center gap-3 rounded-[20px] border-2 border-dark-red/25 p-3" data-item data-id={flavor.id} data-name={flavor.name}>
+                    {flavor.mascot && <Sticker image={flavor.mascot} alt="" tilt={index % 2 ? 6 : -6} size={64} reveal={false} class="w-11 shrink-0 sm:w-14" />}
+                    <div class="min-w-0 flex-1">
+                      <p class="mb-0 font-bold leading-tight">{flavor.name}</p>
+                      {flavor.tagline && <p class="small mb-0">{flavor.tagline}</p>}
+                    </div>
+                    <div class="flex shrink-0 items-center gap-1">
+                      <button type="button" class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dark-red/25 sm:h-11 sm:w-11" data-step="-1" aria-label={`${flavor.name}: რაოდენობის შემცირება`}>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M2 7h10" /></svg>
+                      </button>
+                      <output class="w-6 text-center font-bold sm:w-8" data-qty aria-live="polite" aria-label={`${flavor.name}: რაოდენობა`}>
+                        {index === 0 ? 1 : 0}
+                      </output>
+                      <button type="button" class="flex h-10 w-10 items-center justify-center rounded-full bg-prepo-red text-cream sm:h-11 sm:w-11" data-step="1" aria-label={`${flavor.name}: რაოდენობის გაზრდა`}>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 2v10M2 7h10" /></svg>
+                      </button>
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="mt-5 grid gap-4 sm:grid-cols-2">
+            <label class="block">
+              <span class="small mb-1 block font-bold">სახელი</span>
+              <input class={field} type="text" name="name" autocomplete="name" required placeholder="შენი სახელი" />
+            </label>
+            <label class="block">
+              <span class="small mb-1 block font-bold">ტელეფონი</span>
+              <input class={field} type="tel" name="phone" autocomplete="tel" inputmode="tel" required placeholder="5XX XX XX XX" />
+            </label>
+          </div>
+
+          <label class="mt-4 block">
+            <span class="small mb-1 block font-bold">მისამართი ({site.deliveryCity})</span>
+            <textarea class={field} name="address" rows="2" autocomplete="street-address" required placeholder="ქუჩა, სახლი, ბინა"></textarea>
+          </label>
+          <p class="small mb-0 mt-1">მიწოდება ამ ეტაპზე მხოლოდ ქალაქში: {site.deliveryCity}.</p>
+
+          <fieldset class="mt-5 min-w-0">
+            <legend class="small mb-2 font-bold">გადახდის მეთოდი</legend>
+            <div class="grid gap-3 sm:grid-cols-2">
+              {
+                site.paymentMethods.map((method, index) => (
+                  <label class="flex cursor-pointer items-center gap-3 rounded-[20px] border-2 border-dark-red/25 p-3 has-[:checked]:border-prepo-red has-[:checked]:bg-prepo-red/10">
+                    <input type="radio" name="payment" value={method.label} checked={index === 0} class="h-5 w-5 shrink-0 accent-prepo-red" />
+                    <span>
+                      <span class="block font-bold leading-tight">{method.label}</span>
+                      <span class="small block">{method.note}</span>
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <!-- ბოტებისგან დაცვა: ადამიანი ამ ველს ვერ ხედავს -->
+          <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+
+          <div class="mt-5 rounded-[20px] bg-prepo-red/10 p-4" data-summary>
+            <ul class="space-y-1" data-summary-lines></ul>
+            {
+              hasPrice && (
+                <>
+                  <p class="mb-0 mt-1 flex justify-between gap-3" data-delivery-row hidden>
+                    <span>მიწოდება</span>
+                    <span data-delivery-value />
+                  </p>
+                  <p class="mb-0 mt-3 flex items-baseline justify-between gap-3 border-t-2 border-dashed border-dark-red/25 pt-3">
+                    <strong>სულ:</strong>
+                    <span class="price" data-total />
+                  </p>
+                </>
+              )
+            }
+          </div>
+
+          <p class="mb-0 mt-4 rounded-[20px] bg-dark-red px-4 py-3 font-bold text-cream" role="alert" data-error hidden></p>
+
+          <button type="submit" class="btn btn-red mt-5 w-full" disabled={!enabled} data-submit>შეკვეთის გაგზავნა</button>
+          {!enabled && <p class="small mb-0 mt-3 text-center font-bold">შეკვეთების მიღება ჯერ ჩართული არ არის.</p>}
+        </form>
+
+        <div class="py-8 text-center" data-success hidden tabindex="-1">
+          <Sticker image="mascotSitting" alt="" tilt={-6} size={160} float reveal={false} class="mx-auto w-36" />
+          <h2 class="mt-4">მადლობა!</h2>
+          <p class="lead mx-auto">შეკვეთა მიღებულია. დასადასტურებლად მალე დაგიკავშირდებით.</p>
+          <a href="/" class="btn btn-red mt-2">მთავარ გვერდზე დაბრუნება</a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-order-form]');
+  if (form) {
+    const price = form.dataset.price ? Number(form.dataset.price) : null;
+    const delivery = form.dataset.delivery ? Number(form.dataset.delivery) : null;
+    const key = form.dataset.key ?? '';
+    const max = Number(form.dataset.max) || 10;
+    const items = [...form.querySelectorAll<HTMLElement>('[data-item]')];
+    const lines = form.querySelector<HTMLElement>('[data-summary-lines]')!;
+    const totalEl = form.querySelector<HTMLElement>('[data-total]');
+    const deliveryRow = form.querySelector<HTMLElement>('[data-delivery-row]');
+    const deliveryValue = form.querySelector<HTMLElement>('[data-delivery-value]');
+    const errorEl = form.querySelector<HTMLElement>('[data-error]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const success = document.querySelector<HTMLElement>('[data-success]')!;
+    const gel = (value: number) => `${Number.isInteger(value) ? value : value.toFixed(2)} ₾`;
+    const qtyOf = (item: HTMLElement) => Number(item.querySelector('[data-qty]')!.textContent);
+
+    // გემოს ბარათიდან მოსვლისას (/order?flavor=pesto) ის გემო ირჩევა წინასწარ
+    const preselect = new URLSearchParams(location.search).get('flavor');
+    if (preselect && items.some((item) => item.dataset.id === preselect)) {
+      items.forEach((item) => (item.querySelector('[data-qty]')!.textContent = item.dataset.id === preselect ? '1' : '0'));
+    }
+
+    const selected = () => items.map((item) => ({ id: item.dataset.id!, name: item.dataset.name!, quantity: qtyOf(item) })).filter((item) => item.quantity > 0);
+    const total = () => {
+      if (price === null) return null;
+      const count = selected().reduce((sum, item) => sum + item.quantity, 0);
+      return count * price + (count > 0 && delivery ? delivery : 0);
+    };
+
+    const render = () => {
+      const chosen = selected();
+      lines.replaceChildren(
+        ...(chosen.length
+          ? chosen.map((item) => {
+              const li = document.createElement('li');
+              li.className = 'flex justify-between gap-3';
+              const left = document.createElement('span');
+              left.textContent = item.name;
+              const right = document.createElement('strong');
+              right.textContent = price === null ? `× ${item.quantity}` : `${item.quantity} × ${gel(price)}`;
+              li.append(left, right);
+              return li;
+            })
+          : [Object.assign(document.createElement('li'), { textContent: 'აირჩიე მინიმუმ ერთი კონტეინერი.' })]),
+      );
+      if (deliveryRow && deliveryValue && delivery !== null) {
+        deliveryRow.hidden = chosen.length === 0;
+        deliveryValue.textContent = delivery === 0 ? 'უფასო' : gel(delivery);
+      }
+      const sum = total();
+      if (totalEl && sum !== null) totalEl.textContent = gel(sum);
+    };
+
+    form.addEventListener('click', (event) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>('[data-step]');
+      if (!button) return;
+      const output = button.closest('[data-item]')!.querySelector('[data-qty]')!;
+      output.textContent = String(Math.min(max, Math.max(0, Number(output.textContent) + Number(button.dataset.step))));
+      render();
+    });
+
+    const fail = (message: string, focus?: HTMLElement | null) => {
+      errorEl.textContent = message;
+      errorEl.hidden = false;
+      focus?.focus();
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorEl.hidden = true;
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '').trim();
+      const phone = String(data.get('phone') ?? '').trim();
+      const address = String(data.get('address') ?? '').trim();
+      const chosen = selected();
+
+      if (!key) return fail('შეკვეთების მიღება ჯერ ჩართული არ არის.');
+      if (chosen.length === 0) return fail('აირჩიე მინიმუმ ერთი კონტეინერი.');
+      if (!name) return fail('ჩაწერე სახელი.', form.querySelector<HTMLElement>('[name="name"]'));
+      if (phone.replace(/\D/g, '').length < 9) return fail('ჩაწერე ტელეფონის ნომერი სრულად.', form.querySelector<HTMLElement>('[name="phone"]'));
+      if (!address) return fail('ჩაწერე მისამართი.', form.querySelector<HTMLElement>('[name="address"]'));
+
+      const sum = total();
+      const label = submit.textContent;
+      submit.disabled = true;
+      submit.textContent = 'იგზავნება...';
+      try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: key,
+            subject: `ახალი შეკვეთა — Prepo (${name})`,
+            from_name: 'Prepo საიტი',
+            botcheck: data.get('botcheck') ? 'on' : '',
+            სახელი: name,
+            ტელეფონი: phone,
+            მისამართი: address,
+            გადახდა: data.get('payment'),
+            შეკვეთა: chosen.map((item) => `${item.name} × ${item.quantity}`).join(', '),
+            ჯამი: sum === null ? 'ფასი საიტზე მითითებული არ არის' : gel(sum),
+          }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.success) throw new Error(result.message ?? 'submit failed');
+
+        document.dispatchEvent(new CustomEvent('prepo:order', { detail: { items: chosen.map(({ id, quantity }) => ({ id, quantity })), total: sum } }));
+        form.hidden = true;
+        success.hidden = false;
+        success.focus();
+        success.scrollIntoView({ block: 'center' });
+      } catch {
+        fail('შეკვეთა ვერ გაიგზავნა. შეამოწმე ინტერნეტი და სცადე ხელახლა.');
+        submit.disabled = false;
+        submit.textContent = label;
+      }
+    });
+
+    render();
+  }
+</script>

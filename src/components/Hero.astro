@@ -1,7 +1,7 @@
 ---
 // მობილურზე: ვიდეო მთელ ეკრანზე, ტექსტი ქვემოთ წითელ ბარათში.
 // Desktop-ზე: ტექსტი მარცხნივ, ვიდეო მომრგვალებულ ჩარჩოში მარჯვნივ.
-// ტიპოგრაფია: h1 = display (40 → 84px, 900), ქვესათაური = .lead — იხ. TYPOGRAPHY.md
+// ტიპოგრაფია: სლოგანი = .display (40 → 84px), ქვესათაური = .lead — იხ. TYPOGRAPHY.md
 import HeroVideo from './HeroVideo.astro';
 import OrderButton from './OrderButton.astro';
 import Sticker from './Sticker.astro';
@@ -29,7 +29,9 @@ import Sticker from './Sticker.astro';
           eager
           class="absolute -top-24 right-1 w-28 lg:hidden"
         />
-        <h1 id="hero-title">რესტორნის გემო სახლში, წუთებში</h1>
+        <!-- H1 საკვანძო სიტყვაა (SEO); ვიზუალურად ზედა წარწერაა. დიდი სლოგანი ჩვეულებრივი ტექსტია display ზომით. -->
+        <h1 id="hero-title" class="eyebrow bg-cream text-dark-red lg:bg-prepo-red lg:text-cream">პასტის სოუსები</h1>
+        <p class="display mb-[0.4em] max-w-none">რესტორნის გემო სახლში, წუთებში</p>
         <p class="lead max-w-xl">
           პრეპო ნამდვილი იტალიური სოუსია, უკვე მომზადებული და გაყინული. შენ მხოლოდ პასტა მოხარშე. დანარჩენი ჩვენ უკვე გავაკეთეთ.
         </p>

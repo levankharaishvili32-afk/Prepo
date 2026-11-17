@@ -19,6 +19,11 @@
   .btn:active {
     transform: translateY(1px);
   }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
   .btn-red {
     @apply bg-prepo-red text-cream shadow-pop;
   }

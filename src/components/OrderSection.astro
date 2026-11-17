@@ -1,7 +1,7 @@
 ---
 // შეკვეთის სექცია — ცალკე კომპონენტი, რომ მოგვიანებით ფორმით ან კალათით ადვილად ჩანაცვლდეს.
-// ახლანდელი ვერსია: ერთი ღილაკი, რომელიც site.orderUrl-ზე მიდის.
-// სანამ orderUrl ცარიელია, ღილაკის ნაცვლად ჩანს site.orderFallbackText.
+// ახლანდელი ვერსია: ერთი ღილაკი, რომელიც orderUrl-ზე ან /order გვერდზე მიდის.
+// სანამ არც orderUrl და არც orderFormKey არ არის შევსებული, ღილაკის ნაცვლად ჩანს site.orderFallbackText.
 import OrderButton from './OrderButton.astro';
 import Sticker from './Sticker.astro';
 import { site } from '../config/site';
@@ -36,7 +36,7 @@ const contacts = [
 
       <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
         {
-          site.orderUrl ? (
+          site.orderUrl || site.orderFormKey ? (
             <OrderButton variant="cream" />
           ) : (
             <p class="mb-0 rounded-card bg-cream px-6 py-3 font-bold text-dark-red">{site.orderFallbackText}</p>
