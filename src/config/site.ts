@@ -60,7 +60,7 @@ export const site = {
   metaPixelId: null as string | null,
 
   /** დომენი პროტოკოლის გარეშე, მაგ. 'prepo.ge'. საჭიროა სწორი OG ბმულებისთვის. */
-  domain: 'prepo-tau.vercel.app' as string | null,
+  domain: 'www.prepo.ge' as string | null,
 
   /** Footer-ის იურიდიული ტექსტი (იურიდიული პირი, ს/კ და ა.შ.). */
   legalText: null as string | null,
