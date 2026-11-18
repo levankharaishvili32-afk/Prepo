@@ -5,8 +5,10 @@
  * - PageView: გვერდის გახსნისას.
  * - Lead: ნებისმიერ „შეუკვეთე" ღილაკზე დაჭერისას ([data-order] ატრიბუტი).
  *   თუ ღილაკი კონკრეტულ გემოს ეკუთვნის (data-flavor="pesto"), გემო პარამეტრად მიჰყვება.
- * - Purchase: /order გვერდზე შეკვეთის წარმატებით გაგზავნისას (ფორმა უშვებს `prepo:order` ივენთს).
- *   თუ ფასი ცნობილია, მიჰყვება თანხა (GEL); თუ არა, იგზავნება Lead გემოების სიით.
+ * - Purchase: /thank-you გვერდის გახსნისას, შეკვეთის წარმატებით გაგზავნის შემდეგ.
+ *   პარამეტრები: value (ჯამი), currency (GEL), contents, num_items.
+ *   იგზავნება ერთხელ: გვერდის განახლება ან პირდაპირ გახსნა ივენთს აღარ იმეორებს.
+ *   თუ ფასი საიტზე მითითებული არ არის (price: null), Purchase-ის ნაცვლად იგზავნება Lead.
  */
 
 type Fbq = ((...args: unknown[]) => void) & {
@@ -66,15 +68,33 @@ export type OrderDetail = { items: { id: string; quantity: number }[]; total: nu
 export function trackOrder(detail: OrderDetail) {
   const contents = detail.items.map((item) => ({ id: item.id, quantity: item.quantity }));
   if (detail.total !== null) {
-    window.fbq?.('track', 'Purchase', { value: detail.total, currency: 'GEL', contents, content_type: 'product' });
+    const numItems = detail.items.reduce((sum, item) => sum + item.quantity, 0);
+    window.fbq?.('track', 'Purchase', {
+      value: detail.total,
+      currency: 'GEL',
+      contents,
+      content_ids: detail.items.map((item) => item.id),
+      content_type: 'product',
+      num_items: numItems,
+    });
   } else {
     window.fbq?.('track', 'Lead', { content_name: detail.items.map((item) => item.id).join(','), content_category: 'order' });
   }
 }
 
-/** შეკვეთის ფორმა (src/pages/order.astro) წარმატებისას უშვებს `prepo:order` ივენთს. */
+/**
+ * /thank-you გვერდი შეკვეთის დეტალებს ორი გზით გვაწვდის: `prepo:order` ივენთით და window.__prepoOrder-ით.
+ * ორივეს ვამოწმებთ, რომ ივენთი არ დაიკარგოს სკრიპტების ჩატვირთვის რიგის მიუხედავად, და ვაგზავნით მხოლოდ ერთხელ.
+ */
 function bindOrderForm() {
-  document.addEventListener('prepo:order', (event) => trackOrder((event as CustomEvent<OrderDetail>).detail));
+  let sent = false;
+  const send = (detail?: OrderDetail) => {
+    if (sent || !detail) return;
+    sent = true;
+    trackOrder(detail);
+  };
+  document.addEventListener('prepo:order', (event) => send((event as CustomEvent<OrderDetail>).detail));
+  send((window as Window & { __prepoOrder?: OrderDetail }).__prepoOrder);
 }
 
 export function initPixel(pixelId: string) {

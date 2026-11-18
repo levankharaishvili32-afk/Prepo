@@ -1,0 +1,86 @@
+---
+// „მადლობის" გვერდი. შეკვეთის ფორმა (/order) წარმატების შემდეგ აქ გადმოამისამართებს.
+// - შეკვეთის მონაცემები მოდის sessionStorage-დან (გასაღები: prepo:order) და ერთხელ გამოიყენება:
+//   გვერდის განახლება ან პირდაპირ გახსნა Purchase-ს ხელახლა აღარ აგზავნის.
+// - Meta Pixel-ის Purchase ივენთი სწორედ აქ იგზავნება (ლოგიკა: src/lib/pixel.ts).
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Sticker from '../components/Sticker.astro';
+import { site } from '../config/site';
+---
+
+<Base title={`მადლობა — ${site.name}`} noindex>
+  <Header />
+  <main id="main" class="container-page flex min-h-[70svh] flex-col items-center justify-center py-16 text-center">
+    <Sticker image="mascotSitting" alt="პრეპოს პერსონაჟი ხელს გიქნევს" tilt={-6} size={220} float reveal={false} eager class="w-40 sm:w-52" />
+
+    <!-- ჩანს, როცა შეკვეთა ახლახან გაიგზავნა -->
+    <div data-thanks hidden>
+      <h1 class="h2 mt-6">მადლობა!</h1>
+      <p class="lead mx-auto">შეკვეთა მიღებულია. დასადასტურებლად მალე დაგიკავშირდებით.</p>
+      <div class="mx-auto mt-2 w-full max-w-sm rounded-card bg-prepo-red/10 p-5 text-left" data-thanks-summary hidden>
+        <ul class="space-y-1" data-thanks-lines></ul>
+        <p class="mb-0 mt-3 flex items-baseline justify-between gap-3 border-t-2 border-dashed border-dark-red/25 pt-3" data-thanks-total-row hidden>
+          <strong>სულ:</strong>
+          <span class="price" data-thanks-total></span>
+        </p>
+      </div>
+      <a href="/" class="btn btn-red mt-8">მთავარ გვერდზე დაბრუნება</a>
+    </div>
+
+    <!-- ჩანს, თუ გვერდი პირდაპირ გაიხსნა ან განახლდა (შეკვეთის გარეშე) -->
+    <div data-no-order hidden>
+      <h1 class="h2 mt-6">აქ შეკვეთის შემდეგ მოხვდები</h1>
+      <p class="lead mx-auto">შეკვეთის გასაკეთებლად გადადი შეკვეთის გვერდზე.</p>
+      <a href="/order" class="btn btn-red mt-4">შეუკვეთე ახლავე</a>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  type StoredOrder = { items: { id: string; name: string; quantity: number }[]; total: number | null };
+
+  const KEY = 'prepo:order';
+  let order: StoredOrder | null = null;
+  try {
+    const raw = sessionStorage.getItem(KEY);
+    if (raw) order = JSON.parse(raw) as StoredOrder;
+    sessionStorage.removeItem(KEY); // ერთჯერადია: განახლებისას Purchase აღარ გაიგზავნება
+  } catch {
+    order = null;
+  }
+
+  const show = (selector: string) => document.querySelector<HTMLElement>(selector)?.removeAttribute('hidden');
+
+  if (order && Array.isArray(order.items) && order.items.length > 0) {
+    show('[data-thanks]');
+    const lines = document.querySelector<HTMLElement>('[data-thanks-lines]');
+    if (lines) {
+      for (const item of order.items) {
+        const li = document.createElement('li');
+        li.className = 'flex justify-between gap-3';
+        const name = document.createElement('span');
+        name.textContent = item.name;
+        const quantity = document.createElement('strong');
+        quantity.textContent = `× ${item.quantity}`;
+        li.append(name, quantity);
+        lines.append(li);
+      }
+      show('[data-thanks-summary]');
+    }
+    if (order.total !== null) {
+      const total = document.querySelector<HTMLElement>('[data-thanks-total]');
+      if (total) total.textContent = `${Number.isInteger(order.total) ? order.total : order.total.toFixed(2)} ₾`;
+      show('[data-thanks-total-row]');
+    }
+
+    // Meta Pixel: დეტალები ინახება window-ზეც, რომ ივენთი არ დაიკარგოს, თუ პიქსელი ამ სკრიპტზე გვიან ჩაირთვება.
+    const detail = { items: order.items.map(({ id, quantity }) => ({ id, quantity })), total: order.total };
+    (window as Window & { __prepoOrder?: unknown }).__prepoOrder = detail;
+    document.dispatchEvent(new CustomEvent('prepo:order', { detail }));
+  } else {
+    show('[data-no-order]');
+  }
+</script>

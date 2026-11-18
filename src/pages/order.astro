@@ -1,6 +1,7 @@
 ---
 // შეკვეთის გვერდი: გემოების რაოდენობა, საკონტაქტო მონაცემები, გადახდის მეთოდი, ჯამი.
 // ფორმა იგზავნება Web3Forms-ით ელფოსტაზე (site.orderFormKey). სერვერი საჭირო არ არის.
+// წარმატების შემდეგ მომხმარებელი გადადის /thank-you გვერდზე.
 // ფასი, მიწოდების ღირებულება და მეთოდები: src/config/site.ts
 import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
@@ -138,12 +139,6 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
           {!enabled && <p class="small mb-0 mt-3 text-center font-bold">შეკვეთების მიღება ჯერ ჩართული არ არის.</p>}
         </form>
 
-        <div class="py-8 text-center" data-success hidden tabindex="-1">
-          <Sticker image="mascotSitting" alt="" tilt={-6} size={160} float reveal={false} class="mx-auto w-36" />
-          <h2 class="mt-4">მადლობა!</h2>
-          <p class="lead mx-auto">შეკვეთა მიღებულია. დასადასტურებლად მალე დაგიკავშირდებით.</p>
-          <a href="/" class="btn btn-red mt-2">მთავარ გვერდზე დაბრუნება</a>
-        </div>
       </div>
     </div>
   </main>
@@ -164,7 +159,6 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
     const deliveryValue = form.querySelector<HTMLElement>('[data-delivery-value]');
     const errorEl = form.querySelector<HTMLElement>('[data-error]')!;
     const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
-    const success = document.querySelector<HTMLElement>('[data-success]')!;
     const gel = (value: number) => `${Number.isInteger(value) ? value : value.toFixed(2)} ₾`;
     const qtyOf = (item: HTMLElement) => Number(item.querySelector('[data-qty]')!.textContent);
 
@@ -259,11 +253,15 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
         const result = await response.json().catch(() => ({}));
         if (!response.ok || !result.success) throw new Error(result.message ?? 'submit failed');
 
-        document.dispatchEvent(new CustomEvent('prepo:order', { detail: { items: chosen.map(({ id, quantity }) => ({ id, quantity })), total: sum } }));
-        form.hidden = true;
-        success.hidden = false;
-        success.focus();
-        success.scrollIntoView({ block: 'center' });
+        // წარმატება: შეკვეთის დეტალები ინახება ერთჯერადად და მომხმარებელი გადადის /thank-you-ზე.
+        // Meta Pixel-ის Purchase ივენთი იქ იგზავნება (src/pages/thank-you.astro, src/lib/pixel.ts).
+        const rounded = sum === null ? null : Math.round(sum * 100) / 100;
+        try {
+          sessionStorage.setItem('prepo:order', JSON.stringify({ items: chosen, total: rounded }));
+        } catch {
+          // sessionStorage მიუწვდომელია: გვერდი მაინც გაიხსნება, უბრალოდ შეჯამების გარეშე
+        }
+        window.location.assign('/thank-you');
       } catch {
         fail('შეკვეთა ვერ გაიგზავნა. შეამოწმე ინტერნეტი და სცადე ხელახლა.');
         submit.disabled = false;
