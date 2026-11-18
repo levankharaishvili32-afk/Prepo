@@ -71,8 +71,9 @@ export const site = {
 
   phone: null as string | null, // მაგ. '+995 5XX XX XX XX'
   email: null as string | null,
-  instagramUrl: null as string | null,
-  facebookUrl: null as string | null,
+  instagramUrl: 'https://www.instagram.com/prepopastasauce/' as string | null,
+  facebookUrl: 'https://www.facebook.com/Prepo.pasta' as string | null,
+  tiktokUrl: 'https://www.tiktok.com/@prepopastasauce' as string | null,
 
   /** Meta Pixel ID. null = Pixel საერთოდ არ იტვირთება. */
   metaPixelId: null as string | null,

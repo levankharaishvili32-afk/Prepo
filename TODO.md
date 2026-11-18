@@ -9,7 +9,6 @@
 | `orderUrl` | შეკვეთის გზა: Instagram/Facebook შეტყობინებები, ფორმა თუ კალათა | ღილაკები `#order` სექციაზე ჩადის; იქ წერია `orderFallbackText` |
 | `price` | ერთი კონტეინერის ფასი (ძველი ~30 ₾ შეიძლება კომპლექტს ეხებოდეს) | ფასი არსად ჩანს |
 | `phone`, `email` | კონტაქტი | footer-ში კონტაქტი არ ჩანს |
-| `instagramUrl`, `facebookUrl` | სოც. ქსელების ბმულები | footer-ში სოც. ქსელები არ ჩანს |
 | `domain` | დომენი | **OG სურათი გაზიარებისას არ გამოჩნდება**; canonical ბმული არ არის |
 | `metaPixelId` | Meta Pixel ID | Pixel არ იტვირთება |
 | `legalText` | იურიდიული პირი, რეგისტრაცია | footer-ში მხოლოდ „© Prepo" |
