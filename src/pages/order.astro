@@ -146,6 +146,8 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
 </Base>
 
 <script>
+  import { rememberPhone } from '../lib/pixel';
+
   const form = document.querySelector<HTMLFormElement>('[data-order-form]');
   if (form) {
     const price = form.dataset.price ? Number(form.dataset.price) : null;
@@ -261,6 +263,8 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
         } catch {
           // sessionStorage მიუწვდომელია: გვერდი მაინც გაიხსნება, უბრალოდ შეჯამების გარეშე
         }
+        // Meta Pixel-ის Advanced Matching: ინახება ტელეფონის SHA-256 ჰეში (არა ნომერი), რომ Purchase-ს მიჰყვეს
+        await rememberPhone(phone);
         window.location.assign('/thank-you');
       } catch {
         fail('შეკვეთა ვერ გაიგზავნა. შეამოწმე ინტერნეტი და სცადე ხელახლა.');

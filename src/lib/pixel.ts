@@ -9,7 +9,53 @@
  *   პარამეტრები: value (ჯამი), currency (GEL), contents, num_items.
  *   იგზავნება ერთხელ: გვერდის განახლება ან პირდაპირ გახსნა ივენთს აღარ იმეორებს.
  *   თუ ფასი საიტზე მითითებული არ არის (price: null), Purchase-ის ნაცვლად იგზავნება Lead.
+ *
+ * Advanced Matching (ტელეფონი):
+ * - შეკვეთის ფორმის გაგზავნისას ტელეფონის ნომერი ნორმალიზდება (მხოლოდ ციფრები, ქვეყნის კოდით 995)
+ *   და იჰეშება SHA-256-ით. ბრაუზერში ინახება მხოლოდ ჰეში (localStorage: prepo:ph), თვითონ ნომერი არა.
+ * - პიქსელი ყოველ გვერდზე ამ ჰეშით ინიციალიზდება (fbq('init', id, { ph })), ამიტომ მას შემდეგ ყველა ივენთს
+ *   (PageView, Lead, Purchase) ჰეშირებული ტელეფონი მიჰყვება, მათ შორის Purchase-ს /thank-you-ზე.
+ * - სანამ ვიზიტორს ნომერი არ ჩაუწერია, ივენთები ტელეფონის გარეშე მიდის (ნომერი უბრალოდ უცნობია).
  */
+
+const PHONE_KEY = 'prepo:ph';
+
+/** '555 12 34 56' / '+995 555 123456' -> '995555123456'. არასრულ ნომერზე აბრუნებს null-ს. */
+export function normalizePhone(raw: string): string | null {
+  let digits = raw.replace(/[^0-9]/g, '').replace(/^00/, '');
+  if (digits.length === 10 && digits.startsWith('0')) digits = digits.slice(1); // 0555... -> 555...
+  if (digits.length === 9) digits = `995${digits}`; // ქართული ნომერი ქვეყნის კოდის გარეშე
+  return digits.length >= 11 && digits.length <= 15 ? digits : null;
+}
+
+async function sha256(value: string): Promise<string> {
+  const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+  return [...new Uint8Array(bytes)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+function storedPhoneHash(): string | null {
+  try {
+    const value = localStorage.getItem(PHONE_KEY);
+    return value && /^[a-f0-9]{64}$/.test(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * იძახებს შეკვეთის ფორმა გაგზავნისას (src/pages/order.astro). ინახავს ტელეფონის ჰეშს შემდეგი გვერდებისთვის.
+ * თუ პიქსელი გამორთულია (window.fbq არ არსებობს), არაფერს აკეთებს.
+ */
+export async function rememberPhone(rawPhone: string): Promise<void> {
+  if (!window.fbq || !window.crypto?.subtle) return;
+  const phone = normalizePhone(rawPhone);
+  if (!phone) return;
+  try {
+    localStorage.setItem(PHONE_KEY, await sha256(phone));
+  } catch {
+    // localStorage ან crypto მიუწვდომელია: ივენთები ტელეფონის გარეშე წავა
+  }
+}
 
 type Fbq = ((...args: unknown[]) => void) & {
   callMethod?: (...args: unknown[]) => void;
@@ -44,7 +90,10 @@ function loadPixel(pixelId: string) {
   script.src = 'https://connect.facebook.net/en_US/fbevents.js';
   document.head.appendChild(script);
 
-  fbq('init', pixelId);
+  // ჰეში უკვე SHA-256-ია; Meta ასეთ მნიშვნელობას ხელახლა აღარ ჰეშავს.
+  const phoneHash = storedPhoneHash();
+  if (phoneHash) fbq('init', pixelId, { ph: phoneHash });
+  else fbq('init', pixelId);
 }
 
 export function trackPageView() {
