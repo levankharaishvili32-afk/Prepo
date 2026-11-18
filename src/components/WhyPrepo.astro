@@ -3,12 +3,11 @@ import { Picture } from 'astro:assets';
 import Sticker from './Sticker.astro';
 import { images } from '../config/images';
 
-// ბრჭყალები ქართული წესით: „ასე“ (TYPOGRAPHY.md, §4.7)
-const reasons = [
-  { title: 'ნამდვილი რეცეპტი', text: 'ავთენტური იტალიური სოუსი, არა „რაღაც მსგავსი“.' },
+const reasons: { title: string; text?: string }[] = [
+  { title: 'ნამდვილი რეცეპტი', text: 'ავთენტური იტალიური სოუსი' },
   { title: 'არც დაჭრა, არც მოშუშვა', text: 'ყველაფერი უკვე გაკეთებულია.' },
-  { title: 'ერთი ტაფა', text: 'ჭურჭელიც მინიმალურია.' },
-  { title: 'ყოველთვის ხელთ გაქვს', text: 'საყინულეში გელოდება „ასეთი დღეებისთვის“.' },
+  { title: 'ნაკლები გასარეცხი ჭურჭელი' },
+  { title: 'მზადდება 5 წუთში' },
 ];
 ---
 
@@ -22,8 +21,8 @@ const reasons = [
         {
           reasons.map((reason, index) => (
             <li class="rounded-card bg-cream p-5 text-dark-red" data-reveal style={`--reveal-delay:${index * 80}ms`}>
-              <h3 class="mb-2 text-prepo-red">{reason.title}</h3>
-              <p class="mb-0">{reason.text}</p>
+              <h3 class:list={[reason.text ? 'mb-2' : 'mb-0', 'text-prepo-red']}>{reason.title}</h3>
+              {reason.text && <p class="mb-0">{reason.text}</p>}
             </li>
           ))
         }

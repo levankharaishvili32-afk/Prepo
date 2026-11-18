@@ -2,11 +2,8 @@
 import { Picture } from 'astro:assets';
 import { images } from '../config/images';
 
-const steps = [
-  { title: 'გახსენი', text: 'ამოიღე საყინულიდან და გახსენი კონტეინერი.' },
-  { title: 'ჩააგდე ტაფაში', text: 'გაყინული სოუსი პირდაპირ ტაფაში მიდის.' },
-  { title: 'მიირთვი', text: 'შეურიე პასტას და ვახშამი მზადაა.' },
-];
+// ნაბიჯებს მხოლოდ სათაური აქვს (მფლობელის ტექსტი)
+const steps = ['მოხარშე პასტა', 'ჩააგდე მოხარშულ პასტაში Prepo-ს სოუსი', 'მიირთვი'];
 ---
 
 <section id="how" class="py-16 lg:py-24" aria-labelledby="how-title">
@@ -25,25 +22,21 @@ const steps = [
     </div>
 
     <div>
-      <span class="eyebrow bg-prepo-red text-cream">როგორ მუშაობს</span>
-      <h2 id="how-title">1 კუბი, 1 ტაფა და ვახშამი მზადაა</h2>
+      <h2 id="how-title">მომზადების წესი</h2>
 
       <ol class="mt-6 space-y-4">
         {
           steps.map((step, index) => (
-            <li class="flex gap-4 rounded-card border-2 border-dark-red/15 p-5" data-reveal style={`--reveal-delay:${index * 90}ms`}>
+            <li class="flex items-center gap-4 rounded-card border-2 border-dark-red/15 p-5" data-reveal style={`--reveal-delay:${index * 90}ms`}>
               <span class="h3 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-prepo-red text-cream" aria-hidden="true">
                 {index + 1}
               </span>
-              <div>
-                <h3 class="mb-1">{step.title}</h3>
-                <p class="mb-0">{step.text}</p>
-              </div>
+              <h3 class="mb-0">{step}</h3>
             </li>
           ))
         }
       </ol>
-      <p class="mb-0 mt-6 text-prepo-red"><strong>არ სჭირდება დაჭრა, მოშუშვა ან რეცეპტის ძებნა. ერთი ტაფა.</strong></p>
+      <p class="mb-0 mt-6 text-prepo-red"><strong>Prepo-ს თითო შეფუთვა განკუთვნილია ორი პორციისთვის</strong></p>
     </div>
   </div>
 </section>
