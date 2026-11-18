@@ -17,6 +17,10 @@ import packaging from '../assets/packaging-mockup.jpg';
 import promoIngredients from '../assets/promo-ingredients.jpg';
 import promoKitchen from '../assets/promo-kitchen.jpg';
 import promoRedGreen from '../assets/promo-red-green.jpg';
+import gallery1 from '../assets/gallery-1-spaghetti-plate.jpg';
+import gallery2 from '../assets/gallery-2-pasta-and-sauce.jpg';
+import gallery3 from '../assets/gallery-3-rigatoni-plate.jpg';
+import gallery4 from '../assets/gallery-4-rigatoni-serving.jpg';
 
 export const images = {
   /** ლოგო: წითელი, გამჭვირვალე ფონით (კრემისფერ ფონზე) */
@@ -41,6 +45,11 @@ export const images = {
   promoKitchen,
   /** სარეკლამო ფოტო წითელ-მწვანე ფონზე */
   promoRedGreen,
+  /** გალერეის ფოტოები (components/Gallery.astro) */
+  gallery1,
+  gallery2,
+  gallery3,
+  gallery4,
 };
 
 export type ImageKey = keyof typeof images;
