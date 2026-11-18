@@ -76,7 +76,7 @@ export const site = {
   tiktokUrl: 'https://www.tiktok.com/@prepopastasauce' as string | null,
 
   /** Meta Pixel ID. null = Pixel საერთოდ არ იტვირთება. */
-  metaPixelId: null as string | null,
+  metaPixelId: '2626434424494913' as string | null,
 
   /** დომენი პროტოკოლის გარეშე, მაგ. 'prepo.ge'. საჭიროა სწორი OG ბმულებისთვის. */
   domain: 'www.prepo.ge' as string | null,
