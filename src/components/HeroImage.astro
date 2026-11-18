@@ -1,0 +1,18 @@
+---
+// Hero-ს ფოტო (ვიდეოს ნაცვლად). პირველი ეკრანის მთავარი სურათია, ამიტომ მაშინვე იტვირთება (eager + fetchpriority=high).
+// სხვა ფოტოს ჩასასმელად შეცვალე `image` გასაღები (src/config/images.ts) და, საჭიროებისას, object-position კლასები.
+import { Picture } from 'astro:assets';
+import { images } from '../config/images';
+---
+
+<Picture
+  src={images.gallery1}
+  alt="სპაგეტი არაბიატას სოუსით თეფშზე, ზემოდან ყველი ეყრება; გვერდით პრეპოს არაბიატას კონტეინერი"
+  formats={['avif', 'webp']}
+  widths={[480, 720, 1080]}
+  sizes="(min-width: 1024px) 420px, 100vw"
+  loading="eager"
+  fetchpriority="high"
+  decoding="async"
+  class="h-full w-full object-cover object-[35%_52%] lg:object-[30%_center]"
+/>

@@ -106,11 +106,7 @@ npm run assets
 
 ეს ქმნის გამჭვირვალე ლოგოებს, მასკოტების სტიკერებს (კრემისფერი კონტურით), ფოტოებს, favicon-ებს და OG სურათს.
 
-```bash
-npm run video
-```
-
-ეს კუმშავს hero-ს ვიდეოს (`public/video/hero.mp4` და `hero.webm`, თითო ~1 MB) და იღებს poster კადრს.
+Hero-ში ახლა ფოტოა და არა ვიდეო ([src/components/HeroImage.astro](src/components/HeroImage.astro)). ვიდეოს დასაბრუნებლად: `npm run video` ხელახლა შექმნის `public/video/`-ს, ხოლო კომპონენტი git-ის ისტორიაშია (`HeroVideo.astro`).
 
 ### ტექსტები
 

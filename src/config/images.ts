@@ -53,9 +53,3 @@ export const images = {
 };
 
 export type ImageKey = keyof typeof images;
-
-/** Hero-ს ვიდეო (public/video/). ხელახლა შესაკუმშად: npm run video */
-export const heroVideo = {
-  webm: '/video/hero.webm',
-  mp4: '/video/hero.mp4',
-};

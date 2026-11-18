@@ -124,7 +124,4 @@ details[open] .faq-icon {
     transform: none;
     transition: none;
   }
-  [data-hero-video] {
-    display: none;
-  }
 }
