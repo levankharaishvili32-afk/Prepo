@@ -7,6 +7,7 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Sticker from '../components/Sticker.astro';
+import BankDetails from '../components/BankDetails.astro';
 import { site } from '../config/site';
 ---
 
@@ -26,6 +27,10 @@ import { site } from '../config/site';
           <span class="price" data-thanks-total></span>
         </p>
       </div>
+      <!-- ჩანს, თუ შეკვეთისას არჩეული იყო ბანკით გადარიცხვა -->
+      <div class="mx-auto mt-4 w-full max-w-sm" data-thanks-bank hidden>
+        <BankDetails />
+      </div>
       <a href="/" class="btn btn-red mt-8">მთავარ გვერდზე დაბრუნება</a>
     </div>
 
@@ -40,7 +45,7 @@ import { site } from '../config/site';
 </Base>
 
 <script>
-  type StoredOrder = { items: { id: string; name: string; quantity: number }[]; total: number | null };
+  type StoredOrder = { items: { id: string; name: string; quantity: number }[]; total: number | null; payment?: string | null };
 
   const KEY = 'prepo:order';
   let order: StoredOrder | null = null;
@@ -74,6 +79,14 @@ import { site } from '../config/site';
       const total = document.querySelector<HTMLElement>('[data-thanks-total]');
       if (total) total.textContent = `${Number.isInteger(order.total) ? order.total : order.total.toFixed(2)} ₾`;
       show('[data-thanks-total-row]');
+    }
+    if (order.payment === 'transfer') {
+      show('[data-thanks-bank]');
+      if (order.total !== null) {
+        const amount = document.querySelector<HTMLElement>('[data-thanks-bank] [data-bank-amount]');
+        if (amount) amount.textContent = `${Number.isInteger(order.total) ? order.total : order.total.toFixed(2)} ₾`;
+        document.querySelector<HTMLElement>('[data-thanks-bank] [data-bank-amount-row]')?.removeAttribute('hidden');
+      }
     }
 
     // Meta Pixel: დეტალები ინახება window-ზეც, რომ ივენთი არ დაიკარგოს, თუ პიქსელი ამ სკრიპტზე გვიან ჩაირთვება.

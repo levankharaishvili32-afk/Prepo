@@ -8,12 +8,14 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Sticker from '../components/Sticker.astro';
+import BankDetails from '../components/BankDetails.astro';
 import { images } from '../config/images';
 import { site } from '../config/site';
 
 const flavors = site.flavors.filter((flavor) => flavor.status === 'available');
 const enabled = Boolean(site.orderFormKey);
 const hasPrice = site.price !== null;
+const orderNotes = site.orderNotes;
 const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 py-3 text-dark-red placeholder:text-dark-red/50 focus:border-prepo-red focus:outline-none';
 ---
 
@@ -99,7 +101,7 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
               {
                 site.paymentMethods.map((method, index) => (
                   <label class="flex cursor-pointer items-center gap-3 rounded-[20px] border-2 border-dark-red/25 p-3 has-[:checked]:border-prepo-red has-[:checked]:bg-prepo-red/10">
-                    <input type="radio" name="payment" value={method.label} checked={index === 0} class="h-5 w-5 shrink-0 accent-prepo-red" />
+                    <input type="radio" name="payment" value={method.label} data-method={method.id} checked={index === 0} class="h-5 w-5 shrink-0 accent-prepo-red" />
                     <span>
                       <span class="block font-bold leading-tight">{method.label}</span>
                       <span class="small block">{method.note}</span>
@@ -109,6 +111,12 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
               }
             </div>
           </fieldset>
+
+          {site.bankTransfer && (
+            <div class="mt-3" data-bank-panel hidden>
+              <BankDetails />
+            </div>
+          )}
 
           <!-- ბოტებისგან დაცვა: ადამიანი ამ ველს ვერ ხედავს -->
           <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
@@ -137,6 +145,31 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
 
           <button type="submit" class="btn btn-red mt-5 w-full" disabled={!enabled} data-submit>შეკვეთის გაგზავნა</button>
           {!enabled && <p class="small mb-0 mt-3 text-center font-bold">შეკვეთების მიღება ჯერ ჩართული არ არის.</p>}
+
+          {
+            (orderNotes.length > 0 || site.orderPrivacyNote) && (
+              <ul class="small mt-5 flex flex-col items-center gap-2 font-bold sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-5">
+                {orderNotes.map((note) => (
+                  <li class="flex items-center gap-1.5">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-pesto-green" aria-hidden="true">
+                      <path d="M3 8.5l3.2 3.2L13 4.8" />
+                    </svg>
+                    {note}
+                  </li>
+                ))}
+                {site.orderPrivacyNote && (
+                  <li class="flex items-center gap-1.5">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-pesto-green" aria-hidden="true">
+                      <rect x="3" y="7" width="10" height="7" rx="1.5" />
+                      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                    </svg>
+                    {site.orderPrivacyNote}
+                  </li>
+                )}
+              </ul>
+            )
+          }
+          {site.delivery && <p class="small mx-auto mb-0 mt-3 text-center">{site.delivery}</p>}
         </form>
 
       </div>
@@ -199,7 +232,24 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
       }
       const sum = total();
       if (totalEl && sum !== null) totalEl.textContent = gel(sum);
+
+      // ბანკის ბლოკი: ჩანს მხოლოდ გადარიცხვის არჩევისას; თანხა = შეკვეთის ჯამი
+      const method = form.querySelector<HTMLInputElement>('[name="payment"]:checked')?.dataset.method;
+      const bankPanel = form.querySelector<HTMLElement>('[data-bank-panel]');
+      if (bankPanel) {
+        bankPanel.hidden = method !== 'transfer';
+        const amountRow = bankPanel.querySelector<HTMLElement>('[data-bank-amount-row]');
+        const amount = bankPanel.querySelector<HTMLElement>('[data-bank-amount]');
+        if (amountRow && amount) {
+          amountRow.hidden = sum === null || chosen.length === 0;
+          if (sum !== null) amount.textContent = gel(sum);
+        }
+      }
     };
+
+    form.addEventListener('change', (event) => {
+      if ((event.target as HTMLInputElement).name === 'payment') render();
+    });
 
     form.addEventListener('click', (event) => {
       const button = (event.target as Element).closest<HTMLButtonElement>('[data-step]');
@@ -259,7 +309,8 @@ const field = 'w-full rounded-[20px] border-2 border-dark-red/25 bg-cream px-4 p
         // Meta Pixel-ის Purchase ივენთი იქ იგზავნება (src/pages/thank-you.astro, src/lib/pixel.ts).
         const rounded = sum === null ? null : Math.round(sum * 100) / 100;
         try {
-          sessionStorage.setItem('prepo:order', JSON.stringify({ items: chosen, total: rounded }));
+          const method = form.querySelector<HTMLInputElement>('[name="payment"]:checked')?.dataset.method ?? null;
+          sessionStorage.setItem('prepo:order', JSON.stringify({ items: chosen, total: rounded, payment: method }));
         } catch {
           // sessionStorage მიუწვდომელია: გვერდი მაინც გაიხსნება, უბრალოდ შეჯამების გარეშე
         }

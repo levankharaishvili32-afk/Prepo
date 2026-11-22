@@ -66,8 +66,19 @@ export const site = {
   maxQuantity: 10,
   paymentMethods: [
     { id: 'cod', label: 'გადახდა მიტანისას', note: 'კურიერთან' },
-    { id: 'transfer', label: 'ბანკით გადარიცხვა', note: 'რეკვიზიტებს მოგწერთ' },
+    { id: 'transfer', label: 'ბანკით გადარიცხვა', note: 'ანგარიშის ნომერი ქვემოთ' },
   ],
+  /**
+   * ბანკის ანგარიში. ჩანს შეკვეთის ფორმაში, როცა არჩეულია „ბანკით გადარიცხვა", და /thank-you გვერდზე.
+   * null = ბლოკი არ ჩანს. recipient (მიმღების სახელი) სურვილისამებრ.
+   */
+  bankTransfer: {
+    iban: 'GE37BG0000000525971489',
+    bank: 'საქართველოს ბანკი',
+    currency: 'GEL',
+    recipient: null as string | null,
+    note: 'დანიშნულებაში ჩაწერე მიწოდების მისამართი' as string | null,
+  } as { iban: string; bank: string; currency: string; recipient: string | null; note: string | null } | null,
 
   phone: null as string | null, // მაგ. '+995 5XX XX XX XX'
   email: null as string | null,
@@ -88,8 +99,18 @@ export const site = {
   cookTime: '5 წუთში' as string | null,
   /** რამდენ პორციაზეა ერთი კონტეინერი (250 მლ). */
   servings: 'ორი პორცია' as string | null,
-  /** მიწოდება: ზონა, ვადა, ღირებულება. */
+  /**
+   * მიწოდების ვადის ტექსტი. ჩანს შეკვეთის ფორმაში, ღილაკის ქვემოთ.
+   * მაგ. 'ვაწვდით შეკვეთის შემდეგ სამუშაო დღეს. შაბათ-კვირას მიწოდება არ ხდება.' null = არ ჩანს.
+   */
   delivery: null as string | null,
+  /**
+   * მოკლე სტრიქონები შეკვეთის ღილაკის ქვემოთ (ნიშნულით). მხოლოდ დადასტურებული ფაქტები!
+   * თუ მიწოდება ფასიანი გახდება (deliveryFee), „უფასო მიწოდება" სტრიქონი აქედან ამოიღე.
+   */
+  orderNotes: ['გადახდა მიტანისას', 'უფასო მიწოდება თბილისში', 'ერთი შეფუთვა ორი პორციაა'] as string[],
+  /** ბოქლომის ნიშნით ჩანს სტრიქონების ბოლოს. null = არ ჩანს. */
+  orderPrivacyNote: 'მონაცემები დაცულია' as string | null,
   /** გადახდის გზები. */
   payment: null as string | null,
   allergens: null as string | null,

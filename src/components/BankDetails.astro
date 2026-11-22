@@ -1,0 +1,56 @@
+---
+// ბანკის ანგარიშის ბლოკი: ნომერი, „კოპირება" ღილაკი, გადასარიცხი თანხა და მინიშნება დანიშნულებაზე.
+// გამოიყენება შეკვეთის ფორმაში (როცა არჩეულია ბანკით გადარიცხვა) და /thank-you გვერდზე.
+// მონაცემები: site.bankTransfer (src/config/site.ts). თანხას ავსებს გვერდის სკრიპტი ([data-bank-amount]).
+import { site } from '../config/site';
+
+const bank = site.bankTransfer;
+---
+
+{
+  bank && (
+    <div class="overflow-hidden rounded-[20px] border-2 border-dark-red text-left" data-bank>
+      <p class="mb-0 bg-dark-red px-4 py-3 font-bold leading-tight text-cream">
+        ბანკის ანგარიში · {bank.bank} ({bank.currency})
+      </p>
+      <div class="space-y-3 p-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 rounded-[16px] border-2 border-dashed border-dark-red/30 p-3">
+          <span class="small whitespace-nowrap font-bold" data-bank-iban={bank.iban}>
+            {bank.iban}
+          </span>
+          <button type="button" class="btn btn-red !min-h-[2.75rem] !px-5 !py-2 !shadow-none" data-bank-copy>
+            კოპირება
+          </button>
+        </div>
+        {bank.recipient && (
+          <p class="mb-0">
+            მიმღები: <strong>{bank.recipient}</strong>
+          </p>
+        )}
+        <p class="mb-0" data-bank-amount-row hidden>
+          გადასარიცხი თანხა: <strong data-bank-amount />
+        </p>
+        {bank.note && <p class="mb-0 rounded-[16px] bg-prepo-red/10 px-4 py-3 font-bold">{bank.note}</p>}
+      </div>
+    </div>
+  )
+}
+
+<script>
+  // „კოპირება": ანგარიშის ნომერი ინტერვალების გარეშე მიდის გაცვლის ბუფერში
+  document.addEventListener('click', async (event) => {
+    const button = (event.target as Element | null)?.closest<HTMLButtonElement>('[data-bank-copy]');
+    if (!button) return;
+    const iban = button.closest('[data-bank]')?.querySelector<HTMLElement>('[data-bank-iban]')?.dataset.bankIban;
+    if (!iban) return;
+    const label = button.dataset.label ?? button.textContent ?? '';
+    button.dataset.label = label;
+    try {
+      await navigator.clipboard.writeText(iban);
+      button.textContent = 'დაკოპირდა';
+    } catch {
+      button.textContent = 'ვერ დაკოპირდა';
+    }
+    setTimeout(() => (button.textContent = label), 2000);
+  });
+</script>
